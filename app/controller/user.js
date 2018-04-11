@@ -3,21 +3,21 @@
 const Controller = require('egg').Controller;
 
 class UserController extends Controller {
-  async get() {
+  // async get() {
 
-  }
+  // }
 
-  async update() {
+  // async update() {
 
-  }
+  // }
 
-  async login() {
+  // async login() {
 
-  }
+  // }
 
-  async register() {
+  // async register() {
 
-  }
+  // }
 }
 
 module.exports = UserController;

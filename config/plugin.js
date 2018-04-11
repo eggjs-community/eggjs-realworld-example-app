@@ -4,15 +4,16 @@
 // exports.static = true;
 exports.jwt = {
   enable: true,
-  package: 'egg-jwt'
-}
+  package: 'egg-jwt',
+};
 
 exports.passport = {
   enable: true,
-  package: 'egg-passport'
-}
+  package: 'egg-passport',
+};
 
 exports.sequelize = {
   enable: true,
-  package: 'egg-sequelize'
+  package: 'egg-sequelize',
 }
+;

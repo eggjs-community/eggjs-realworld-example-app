@@ -1,17 +1,17 @@
-'use strict'
+'use strict';
 
 module.exports = appInfo => {
-  const config = exports = {}
+  const config = exports = {};
 
   // use for cookie sign key, should change to your own and keep security
-  config.keys = appInfo.name + '_1523415779575_1091'
+  config.keys = appInfo.name + '_1523415779575_1091';
 
   // add your config here
-  config.middleware = []
+  config.middleware = [];
 
   config.jwt = {
-    secret: '123456'
-  }
+    secret: '123456',
+  };
 
   exports.sequelize = {
     dialect: 'mysql',
@@ -19,8 +19,8 @@ module.exports = appInfo => {
     host: 'localhost',
     port: '3306',
     username: 'root',
-    password: ''
-  }
+    password: '',
+  };
 
-  return config
-}
+  return config;
+};
