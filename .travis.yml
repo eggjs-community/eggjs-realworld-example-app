@@ -2,6 +2,8 @@ sudo: false
 language: node_js
 node_js:
   - '8'
+notifications:
+  webhooks: https://www.travisbuddy.com/
 install:
   - npm i npminstall && npminstall
 script:
