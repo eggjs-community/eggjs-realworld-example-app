@@ -9,4 +9,4 @@ script:
 after_script:
   - npminstall codecov && codecov
 services:
-  - mongodb
+  - mysql
