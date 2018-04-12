@@ -8,25 +8,29 @@ module.exports = app => {
       type: STRING,
       primaryKey: true,
       unique: true,
+      allowNull: false,
       validate: {
         isLowercase: true,
-        notEmpty: true,
       },
     },
     email: {
       type: STRING,
       unique: true,
+      allowNull: false,
       validate: {
         isEmail: true,
         isLowercase: true,
-        notEmpty: true,
       },
     },
     bio: STRING,
     image: STRING,
-    password: STRING,
+    password: {
+      type: STRING,
+      allowNull: false,
+    },
   }, {
     timestamps: true,
+    tableName: 'users',
   });
 
   User.prototype.associate = function() {

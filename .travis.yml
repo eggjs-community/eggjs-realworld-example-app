@@ -4,6 +4,8 @@ node_js:
   - '8'
 notifications:
   webhooks: https://www.travisbuddy.com/
+before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
 install:
   - npm i npminstall && npminstall
 script:
