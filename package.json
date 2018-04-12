@@ -1,13 +1,12 @@
 {
   "name": "eggjs-realworld-example-app",
   "version": "1.0.0",
-  "description": "Real World Egg.js + Mongodb backend implementations",
+  "description": "Real World Egg.js + Mysql backend implementations",
   "private": true,
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "egg": "^2.2.1",
     "egg-jwt": "^3.0.0",
-    "egg-passport": "^2.0.1",
-    "egg-passport-local": "^1.2.1",
     "egg-scripts": "^2.5.0",
     "egg-sequelize": "^3.1.2",
     "mysql2": "^1.5.3"
@@ -26,8 +25,7 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start":
-      "egg-scripts start --daemon --title=egg-server-eggjs-realworld-example-app",
+    "start": "egg-scripts start --daemon --title=egg-server-eggjs-realworld-example-app",
     "stop": "egg-scripts stop --title=egg-server-eggjs-realworld-example-app",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",

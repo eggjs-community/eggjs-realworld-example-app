@@ -3,10 +3,8 @@
 const Service = require('egg').Service;
 
 class UserService extends Service {
-  async createToken(username) {
-    const { config, app } = this;
-    const token = app.jwt.sign({ username }, config.jwt.secret);
-    return token;
+  async create(user) {
+    return this.ctx.model.User.create(user);
   }
 }
 

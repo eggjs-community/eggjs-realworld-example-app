@@ -7,7 +7,7 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1523415779575_1091';
 
   // add your config here
-  config.middleware = [];
+  config.middleware = [ 'errorHandler' ];
 
   config.jwt = {
     secret: '123456',
@@ -20,6 +20,12 @@ module.exports = appInfo => {
     port: '3306',
     username: 'root',
     password: '',
+  };
+
+  exports.security = {
+    csrf: {
+      enable: false,
+    },
   };
 
   return config;
