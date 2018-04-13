@@ -1,11 +1,16 @@
 {
   "name": "eggjs-realworld-example-app",
   "version": "1.0.0",
-  "description": "Real World Egg.js + Mongodb backend implementations",
+  "description": "Real World Egg.js + Mysql backend implementations",
   "private": true,
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "egg": "^2.2.1",
-    "egg-scripts": "^2.5.0"
+    "egg-jwt": "^3.0.0",
+    "egg-scripts": "^2.5.0",
+    "egg-sequelize": "^3.1.2",
+    "egg-validate": "^1.0.0",
+    "mysql2": "^1.5.3"
   },
   "devDependencies": {
     "autod": "^3.0.1",
@@ -21,8 +26,7 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start":
-      "egg-scripts start --daemon --title=egg-server-eggjs-realworld-example-app",
+    "start": "egg-scripts start --daemon --title=egg-server-eggjs-realworld-example-app",
     "stop": "egg-scripts stop --title=egg-server-eggjs-realworld-example-app",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
@@ -31,7 +35,10 @@
     "cov": "egg-bin cov",
     "lint": "eslint .",
     "ci": "npm run lint && npm run cov",
-    "autod": "autod"
+    "autod": "autod",
+    "migrate:new": "egg-sequelize migration:create",
+    "migrate:up": "egg-sequelize db:migrate",
+    "migrate:down": "egg-sequelize db:migrate:undo"
   },
   "ci": {
     "version": "8"

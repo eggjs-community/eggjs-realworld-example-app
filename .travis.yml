@@ -2,11 +2,18 @@ sudo: false
 language: node_js
 node_js:
   - '8'
+notifications:
+  webhooks: https://www.travisbuddy.com/
+  on_success: never
+before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS realworld;'
 install:
   - npm i npminstall && npminstall
+before_script:
+  - npm run migrate:up
 script:
   - npm run ci
 after_script:
   - npminstall codecov && codecov
 services:
-  - mongodb
+  - mysql
