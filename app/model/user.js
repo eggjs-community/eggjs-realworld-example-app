@@ -1,12 +1,17 @@
 'use strict';
 
 module.exports = app => {
-  const { STRING } = app.Sequelize;
+  const { STRING, UUID, UUIDV4 } = app.Sequelize;
 
   const User = app.model.define('user', {
+    id: {
+      type: UUID,
+      defaultValue: UUIDV4,
+      allowNull: false,
+      primaryKey: true,
+    },
     username: {
       type: STRING,
-      primaryKey: true,
       unique: true,
       allowNull: false,
       validate: {
@@ -31,10 +36,16 @@ module.exports = app => {
   }, {
     timestamps: true,
     tableName: 'users',
+  }, {
+    indexes: [
+      { unique: true, fields: ['username']}
+    ]
   });
 
   User.prototype.associate = function() {
-    app.model.User.hasMany(app.model.Article, { as: 'articles', foreignKey: 'user_username' });
+    app.model.User.hasMany(app.model.Article, { as: 'articles', foreignKey: 'id' });
+    // app.model.User.hasMany(app.model.Favorites, { as: 'favorites', foreignKey: 'id' });
+    // app.model.User.hasMany(app.model.Comments, { as: 'comments', foreignKey: 'id' });
   };
 
   return User;
