@@ -9,4 +9,20 @@ module.exports = app => {
   router.post('/users', controller.user.register);
   router.get('/user', app.jwt, controller.user.get);
   router.put('/user', app.jwt, controller.user.update);
+
+  /**
+   * @feature query 条件参数查询
+   * @query ?tag=AngularJS, ?author=jake, ?favorited=jake, ?limit=20, ?offset=0
+   */
+  router.get('/articles', controller.article.getArticlesByQuery);
+  router.get('/articles/:slug', controller.article.getArticlesBySlug);
+
+  /**
+   * @feature 关注用户动态
+   * @query ?limit=20, ?offset=0
+   */
+  router.get('/articles/feed', app.jwt, controller.article.getArticlesByFeed);
+  router.post('/articles', app.jwt, controller.article.createAnArticle);
+  router.put('/articles/:slug', app.jwt, controller.article.updateArticleBySlug);
+  router.delete('/articles/:slug', app.jwt, controller.article.deleteArticleBySlug);
 };
