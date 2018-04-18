@@ -8,6 +8,7 @@ describe('test/app/service/user.test.js', () => {
   const password = '123456';
   const username = new Date().getTime() + 'user';
   const email = `${username}@qq.com`;
+  const id = '69bc33ad-fbfb-4f55-b85a-38f162fd3836';
 
   before(async () => {
     userService = app.mockContext().service.user;
@@ -19,7 +20,7 @@ describe('test/app/service/user.test.js', () => {
   };
 
   it('create should ok', async () => {
-    user = await userService.create({ email, password, username });
+    user = await userService.create({ id, email, password, username });
     assertUser(user);
   });
 
