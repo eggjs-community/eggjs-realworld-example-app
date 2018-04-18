@@ -4,12 +4,12 @@
 [![Test coverage][codecov-image]][codecov-url]
 [![David deps][david-image]][david-url]
 
-[travis-image]: https://img.shields.io/travis/sinchang/eggjs-realworld-example-app.svg?style=flat-square
-[travis-url]: https://travis-ci.org/sinchang/eggjs-realworld-example-app
-[codecov-image]: https://img.shields.io/codecov/c/github/sinchang/eggjs-realworld-example-app.svg?style=flat-square
-[codecov-url]: https://codecov.io/gh/sinchang/eggjs-realworld-example-app
-[david-image]: https://img.shields.io/david/sinchang/eggjs-realworld-example-app.svg?style=flat-square
-[david-url]: https://david-dm.org/sinchang/eggjs-realworld-example-app
+[travis-image]: https://img.shields.io/travis/eggjs-community/eggjs-realworld-example-app.svg?style=flat-square
+[travis-url]: https://travis-ci.org/eggjs-community/eggjs-realworld-example-app
+[codecov-image]: https://img.shields.io/codecov/c/github/eggjs-community/eggjs-realworld-example-app.svg?style=flat-square
+[codecov-url]: https://codecov.io/gh/eggjs-community/eggjs-realworld-example-app
+[david-image]: https://img.shields.io/david/eggjs-community/eggjs-realworld-example-app.svg?style=flat-square
+[david-url]: https://david-dm.org/eggjs-community/eggjs-realworld-example-app
 
 ## QuickStart
 
