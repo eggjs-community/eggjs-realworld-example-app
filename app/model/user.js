@@ -38,7 +38,8 @@ module.exports = app => {
     tableName: 'users',
   }, {
     indexes: [
-      { unique: true, fields: ['username']}
+      { unique: true, fields: ['email'], operator: 'index_users_on_email' },
+      { unique: true, fields: ['username'], operator: 'index_users_on_username' },
     ]
   });
 
