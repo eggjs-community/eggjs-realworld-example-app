@@ -15,8 +15,8 @@ module.exports = app => {
       unique: true,
       allowNull: false,
       validate: {
-        isUUID: 4
-      }
+        isUUID: 4,
+      },
     },
     title: {
       type: STRING,
@@ -31,11 +31,11 @@ module.exports = app => {
     },
     tagList: {
       type: JSON,
-      defaultValue: []
+      defaultValue: [],
     },
     favoritesCount: {
       type: INTEGER,
-      defaultValue: 0
+      defaultValue: 0,
     },
     userId: {
       type: UUID,
@@ -46,9 +46,9 @@ module.exports = app => {
     tableName: 'article',
   }, {
     indexes: [
-      { unique: true, fields: ['slug'], operator: 'index_articles_on_slug' },
-      { unique: true, fields: ['userId'], operator: 'index_articles_on_user_id' }
-    ]
+      { unique: true, fields: [ 'slug' ], operator: 'index_articles_on_slug' },
+      { unique: true, fields: [ 'userId' ], operator: 'index_articles_on_user_id' },
+    ],
   });
 
   Article.prototype.associate = function() {

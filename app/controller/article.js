@@ -3,17 +3,29 @@
 const Controller = require('egg').Controller;
 
 class ArticleController extends Controller {
-  async getArticlesByQuery() {}
+  async getArticlesByQuery() {
+    // todo
+  }
 
-  async getArticlesBySlug() {}
+  async getArticlesBySlug() {
+    // todo
+  }
 
-  async getArticlesByFeed() {}
+  async getArticlesByFeed() {
+    // todo
+  }
 
-  async createAnArticle() {}
+  async createAnArticle() {
+    // todo
+  }
 
-  async updateArticleBySlug() {}
+  async updateArticleBySlug() {
+    // todo
+  }
 
-  async deleteArticleBySlug() {}
+  async deleteArticleBySlug() {
+    // todo
+  }
 }
 
 module.exports = ArticleController;

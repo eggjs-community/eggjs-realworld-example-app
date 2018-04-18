@@ -38,9 +38,9 @@ module.exports = app => {
     tableName: 'users',
   }, {
     indexes: [
-      { unique: true, fields: ['email'], operator: 'index_user_on_email' },
-      { unique: true, fields: ['username'], operator: 'index_user_on_username' },
-    ]
+      { unique: true, fields: [ 'email' ], operator: 'index_user_on_email' },
+      { unique: true, fields: [ 'username' ], operator: 'index_user_on_username' },
+    ],
   });
 
   User.prototype.associate = function() {
