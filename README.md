@@ -45,3 +45,5 @@ $ npm stop
 * [RealWorld API Spec](https://github.com/gothinkster/realworld/tree/master/api)
 
 * [vue-realworld-example-app](https://vue-vuex-realworld.netlify.com/)
+
+* [telegram group](https://t.me/joinchat/BEmHUwwrW4VbxD_NdTBiEA)
