@@ -20,6 +20,7 @@ module.exports = appInfo => {
     port: '3306',
     username: 'root',
     password: '',
+    timezone: '+08:00', // 东八时区
   };
 
   exports.security = {
