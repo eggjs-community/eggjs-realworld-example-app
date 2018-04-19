@@ -1,8 +1,8 @@
 'use strict';
 
 module.exports = {
-  up: function (queryInterface, Sequelize) {
-    const { STRING, DATE, UUID, UUIDV4, TEXT, INTEGER  } = Sequelize;
+  up(queryInterface, Sequelize) {
+    const { STRING, DATE, UUID, UUIDV4, TEXT, INTEGER } = Sequelize;
     return queryInterface.createTable('article', {
       id: {
         type: UUID,
@@ -46,7 +46,7 @@ module.exports = {
     });
   },
 
-  down: function (queryInterface) {
+  down(queryInterface) {
     return queryInterface.dropTable('article');
-  }
+  },
 };
