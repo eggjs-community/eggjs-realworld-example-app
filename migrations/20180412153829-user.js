@@ -9,11 +9,16 @@ module.exports = {
       Example:
       return queryInterface.createTable('users', { id: Sequelize.INTEGER });
     */
-    const { STRING, DATE } = Sequelize;
+    const { STRING, DATE, UUID, UUIDV4 } = Sequelize;
     return queryInterface.createTable('users', {
+      id: {
+        type: UUID,
+        defaultValue: UUIDV4,
+        allowNull: false,
+        primaryKey: true,
+      },
       username: {
         type: STRING,
-        primaryKey: true,
         unique: true,
         allowNull: false,
         validate: {
