@@ -44,7 +44,9 @@ module.exports = app => {
   });
 
   User.prototype.associate = function() {
+    // bug 关联无效
     app.model.User.hasMany(app.model.Article, { as: 'articles', foreignKey: 'id' });
+
     // app.model.User.hasMany(app.model.Favorites, { as: 'favorites', foreignKey: 'id' });
     // app.model.User.hasMany(app.model.Comments, { as: 'comments', foreignKey: 'id' });
   };

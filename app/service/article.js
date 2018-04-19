@@ -6,57 +6,64 @@ const R = require('ramda');
 
 const articlePick = ['slug', 'title', 'description', 'body', 'tagList', 'updated_at', 'created_at', 'favoritesCount']
 
-class ArticleService extends Service {
-  async getArticlesByQuery(query) {
-    console.log(query);
-  }
+module.exports = app => {
+  // 表关联定义
+  app.model.User.hasMany(app.model.Article, { foreignKey: 'id' });
+  app.model.Article.belongsTo(app.model.User, { foreignKey: 'userId' });
 
-  async getArticlesBySlug(slug) {
-    const { ctx } = this;
+  return class ArticleService extends Service {
+    async getArticlesByQuery(query) {
+      console.log(query);
+    }
 
-    const article = await ctx.model.Article.findOne({
-      attributes: [ ...articlePick, 'id' ],
-      where: { slug },
-    }).then(row => row && row.toJSON())
+    async getArticlesBySlug(slug) {
+      const { ctx } = this;
 
-    return article
-  }
+      const [articleRow] = await ctx.model.Article.findAll({
+        attributes: [ ...articlePick, 'id' ],
+        where: { slug },
+        include: [
+          { model: ctx.model.User, attributes: ['username', 'bio', 'image'] },
+        ]
+      })
 
-  async getArticlesByFeed(follows) {
-    console.log(follows);
-  }
+      return articleRow.toJSON()
+    }
 
-  async createAnArticle(data) {
-    const { ctx } = this;
-    const slug = UUID(data.title);
+    async getArticlesByFeed(follows) {
+      console.log(follows);
+    }
 
-    const pick = R.pick(articlePick);
+    async createAnArticle(data) {
+      const { ctx } = this;
+      const slug = UUID(data.title);
 
-    const articleData = await ctx.model.Article.create({ slug, ...data })
-      .then(R.compose(pick, row => row && row.toJSON()))
-      .catch(e => ctx.throw(444, 'createAnArticle fail'));
-    return articleData;
-  }
+      const pick = R.pick(articlePick);
 
-  async updateArticleBySlug(slug, data) {
-    const { ctx } = this;
+      const articleData = await ctx.model.Article.create({ slug, ...data })
+        .then(R.compose(pick, row => row && row.toJSON()))
+        .catch(e => ctx.throw(444, 'createAnArticle fail'));
+      return articleData;
+    }
 
-    const pick = R.pick(articlePick);
+    async updateArticleBySlug(slug, data) {
+      const { ctx } = this;
 
-    const [updateCount, [updateRow]] = await ctx.model.Article.update(data, { where: { slug }, individualHooks: true })
-    if (updateCount < 1) ctx.throw(444, 'updateArticleBySlug fail');
+      const pick = R.pick(articlePick);
 
-    return R.compose(pick, row => row && row.toJSON())(updateRow);
-  }
+      const [updateCount, [updateRow]] = await ctx.model.Article.update(data, { where: { slug }, individualHooks: true })
+      if (updateCount < 1) ctx.throw(444, 'updateArticleBySlug fail');
 
-  async deleteArticleBySlug(slug) {
-    const { ctx } = this;
+      return R.compose(pick, row => row && row.toJSON())(updateRow);
+    }
 
-    const deleteCount = await ctx.model.Article.destroy({ where: { slug } });
-    if (deleteCount < 1) throw new Error('deleteArticleBySlug fail');
+    async deleteArticleBySlug(slug) {
+      const { ctx } = this;
 
-    return 'delete success'
+      const deleteCount = await ctx.model.Article.destroy({ where: { slug } });
+      if (deleteCount < 1) throw new Error('deleteArticleBySlug fail');
+
+      return 'delete success'
+    }
   }
 }
-
-module.exports = ArticleService;

@@ -53,7 +53,8 @@ module.exports = app => {
   });
 
   Article.prototype.associate = function() {
-    app.model.Article.belongsTo(app.model.User, { as: 'author', foreignKey: 'userId' });
+    // bug 关联无效
+    app.model.Article.belongsTo(app.model.User, { foreignKey: 'userId' });
   };
 
   return Article;
