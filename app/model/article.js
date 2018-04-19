@@ -14,9 +14,6 @@ module.exports = app => {
       type: UUID,
       unique: true,
       allowNull: false,
-      validate: {
-        isUUID: 4,
-      },
     },
     title: {
       type: STRING,
@@ -36,6 +33,10 @@ module.exports = app => {
     favoritesCount: {
       type: INTEGER,
       defaultValue: 0,
+    },
+    favoriteUsers: {
+      type: JSON,
+      defaultValue: [],
     },
     userId: {
       type: UUID,
