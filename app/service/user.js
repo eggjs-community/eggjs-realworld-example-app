@@ -19,7 +19,7 @@ class UserService extends Service {
 
   async update(values, username) {
     const user = await this.ctx.model.User.findOne({ where: { username } });
-    return user.update(values, { raw: true });
+    return user.update(values);
   }
 }
 

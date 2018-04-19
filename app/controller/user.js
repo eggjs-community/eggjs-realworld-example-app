@@ -56,7 +56,7 @@ class UserController extends Controller {
     }
 
     delete existUser.password;
-    existUser.token = app.generateJWT(existUser.username);
+    existUser.token = app.generateJWT(existUser.id, existUser.username);
     ctx.body = {
       user: existUser,
     };
@@ -74,7 +74,7 @@ class UserController extends Controller {
 
     const email = user.email;
     const password = ctx.helper.bhash(user.password);
-    const username = user.username;
+    const { id, username } = user;
     const newUser = {
       username,
       email,
@@ -86,7 +86,7 @@ class UserController extends Controller {
     ctx.body = {
       user: {
         email,
-        token: app.generateJWT(username),
+        token: app.generateJWT(id, username),
         username,
       },
     };
