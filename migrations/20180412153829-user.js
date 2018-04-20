@@ -22,6 +22,7 @@ module.exports = {
         unique: true,
         allowNull: false,
         validate: {
+          is: /^[a-zA-Z]{1}([a-zA-Z0-9]|[._]){4,19}$/i,
           isLowercase: true,
         },
       },

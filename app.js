@@ -6,6 +6,7 @@ module.exports = app => {
       // 自动创建对应的model
       await app.model.User.sync({ force: false });
       await app.model.Article.sync({ force: false });
+      await app.model.Follow.sync({ force: false });
     });
   }
 };

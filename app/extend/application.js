@@ -9,4 +9,9 @@ module.exports = {
   getToken(ctx) {
     return ctx.request.headers.authorization.split(' ')[1];
   },
+  getUserJson(user) {
+    delete user.password;
+    user.token = this.generateJWT(user.id, user.username);
+    return user;
+  },
 };

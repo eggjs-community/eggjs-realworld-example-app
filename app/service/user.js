@@ -9,16 +9,25 @@ class UserService extends Service {
 
   async findByEmail(email) {
     const user = await this.ctx.model.User.findOne({ where: { email }, raw: true });
+    if (!user) {
+      this.ctx.throw(404, 'user not found');
+    }
     return user;
   }
 
   async findByUsername(username) {
     const user = await this.ctx.model.User.findOne({ where: { username }, raw: true });
+    if (!user) {
+      this.ctx.throw(404, 'user not found');
+    }
     return user;
   }
 
   async update(values, username) {
     const user = await this.ctx.model.User.findOne({ where: { username } });
+    if (!user) {
+      this.ctx.throw(404, 'user not found');
+    }
     return user.update(values);
   }
 }

@@ -6,7 +6,7 @@ describe('test/app/service/user.test.js', () => {
   let user,
     userService;
   const password = '123456';
-  const username = new Date().getTime() + 'user';
+  const username = 'user1' + new Date().getTime();
   const email = `${username}@qq.com`;
   const id = '69bc33ad-fbfb-4f55-b85a-38f162fd3836';
 

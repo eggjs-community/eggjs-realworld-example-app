@@ -8,10 +8,8 @@ class UserController extends Controller {
     const { username } = this.ctx.state.user;
 
     const user = await this.service.user.findByUsername(username);
-    delete user.password;
-    user.token = app.getToken(ctx);
     ctx.body = {
-      user,
+      user: app.getUserJson(user),
     };
   }
 
@@ -30,10 +28,8 @@ class UserController extends Controller {
 
     let existUser = await ctx.service.user.update(user, username);
     existUser = existUser.dataValues;
-    delete existUser.password;
-    existUser.token = app.getToken(ctx);
     ctx.body = {
-      user: existUser,
+      user: app.getUserJson(existUser),
     };
   }
 
@@ -55,10 +51,8 @@ class UserController extends Controller {
       return;
     }
 
-    delete existUser.password;
-    existUser.token = app.generateJWT(existUser.id, existUser.username);
     ctx.body = {
-      user: existUser,
+      user: app.getUserJson(existUser),
     };
   }
 
