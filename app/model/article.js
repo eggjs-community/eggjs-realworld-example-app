@@ -44,9 +44,9 @@ module.exports = app => {
     },
   }, {
     timestamps: true,
-    tableName: 'article',
-    createdAt: 'createdAt',
     updatedAt: 'updatedAt',
+    createdAt: 'createdAt',
+    tableName: 'articles',
   }, {
     indexes: [
       { unique: true, fields: [ 'slug' ], operator: 'index_articles_on_slug' },

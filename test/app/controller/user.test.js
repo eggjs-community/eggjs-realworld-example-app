@@ -5,7 +5,7 @@ const { app, assert } = require('egg-mock/bootstrap');
 describe('test/app/controller/user.test.js', () => {
   let token;
   const password = '123456';
-  const username = new Date().getTime() + 'user';
+  const username = 'user' + new Date().getTime();
   const email = `${username}@qq.com`;
   const id = '69bc33ad-fbfb-4f55-b85a-38f162fd3836';
 
