@@ -7,7 +7,7 @@ describe('test/app/controller/follow.test.js', () => {
   const username1 = 'user1' + new Date().getTime();
   const username2 = 'user2' + new Date().getTime();
   const email1 = `${username1}@qq.com`;
-  const email2 = `${username1}@qq.com`;
+  const email2 = `${username2}@qq.com`;
   let token;
 
   before(async () => {
@@ -23,15 +23,16 @@ describe('test/app/controller/follow.test.js', () => {
     const res = await app.httpRequest()
       .post(`/profiles/${username2}/follow`)
       .set('Authorization', `Bearer ${token}`);
-    assert(res.following);
-    assert(res.username === username1);
+    console.log(res.body);
+    assert(res.body.profile.following);
+    assert(res.body.profile.username === username1);
   });
 
   it('unfollow should ok', async () => {
     const res = await app.httpRequest()
       .delete(`/profiles/${username2}/follow`)
       .set('Authorization', `Bearer ${token}`);
-    assert(res.following === false);
-    assert(res.username === username1);
+    assert(res.body.profile.following === false);
+    assert(res.body.profile.username === username1);
   });
 });

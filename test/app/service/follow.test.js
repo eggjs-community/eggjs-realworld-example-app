@@ -7,7 +7,7 @@ describe('test/app/service/follow.test.js', () => {
   const username1 = 'user1' + new Date().getTime();
   const username2 = 'user2' + new Date().getTime();
   const email1 = `${username1}@qq.com`;
-  const email2 = `${username1}@qq.com`;
+  const email2 = `${username2}@qq.com`;
   let followService;
 
   before(async () => {
