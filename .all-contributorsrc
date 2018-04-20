@@ -1,0 +1,23 @@
+{
+  "projectName": "eggjs-realworld-example-app",
+  "projectOwner": "eggjs-community",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "sinchang",
+      "name": "sinchang",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/3297859?v=4",
+      "profile": "https://buymeacoff.ee/sinchang",
+      "contributions": [
+        "code",
+        "infra"
+      ]
+    }
+  ]
+}

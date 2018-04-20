@@ -15,6 +15,7 @@
     "uuid": "^3.2.1"
   },
   "devDependencies": {
+    "all-contributors-cli": "^4.11.1",
     "autod": "^3.0.1",
     "autod-egg": "^1.1.0",
     "babel-eslint": "^8.2.3",
@@ -41,7 +42,9 @@
     "autod": "autod",
     "migrate:new": "egg-sequelize migration:create",
     "migrate:up": "egg-sequelize db:migrate",
-    "migrate:down": "egg-sequelize db:migrate:undo"
+    "migrate:down": "egg-sequelize db:migrate:undo",
+    "contributors:add": "all-contributors add",
+    "contributors:generate": "all-contributors generate"
   },
   "ci": {
     "version": "8"
