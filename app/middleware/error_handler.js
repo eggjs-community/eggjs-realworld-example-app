@@ -3,6 +3,7 @@
 // ref: https://github.com/eggjs/examples/blob/master/cnode-api/app/middleware/error_handler.js
 
 module.exports = (option, app) => {
+  // 中间件的配置项，框架会将 app.config[${middlewareName}] 传递进来
   return async function(ctx, next) {
     try {
       await next();

@@ -11,6 +11,18 @@ module.exports = appInfo => {
 
   config.jwt = {
     secret: '123456',
+    getToken(ctx) {
+      if (
+        ctx.headers.authorization &&
+        ctx.headers.authorization.split(' ')[0] === 'Bearer' ||
+        ctx.headers.authorization.split(' ')[0] === 'Token'
+      ) {
+        return ctx.headers.authorization.split(' ')[1];
+      } else if (ctx.query && ctx.query.token) {
+        return ctx.query.token;
+      }
+      return null;
+    },
   };
 
   exports.sequelize = {
