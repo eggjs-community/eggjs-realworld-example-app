@@ -4,11 +4,10 @@ const Controller = require('egg').Controller;
 
 class ArticleController extends Controller {
   async favoriteArticle() {
-    const { ctx, app, config, service } = this;
+    const { ctx, app, service } = this;
     const { slug } = ctx.params;
 
-    const token = app.getToken(ctx);
-    const user = app.jwt.verify(token, config.jwt.secret);
+    const user = app.verifyToken(ctx);
 
     const article = await service.article.favoriteArticle(user, slug);
 
@@ -16,11 +15,10 @@ class ArticleController extends Controller {
   }
 
   async unFavoriteArticle() {
-    const { ctx, app, config, service } = this;
+    const { ctx, app, service } = this;
     const { slug } = ctx.params;
 
-    const token = app.getToken(ctx);
-    const user = app.jwt.verify(token, config.jwt.secret);
+    const user = app.verifyToken(ctx);
 
     const article = await service.article.unFavoriteArticle(user, slug);
 

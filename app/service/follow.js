@@ -14,6 +14,11 @@ class FollowService extends Service {
     }
     return follows.destroy();
   }
+
+  async is(follow) {
+    const follows = await this.ctx.model.Follow.findOne({ where: follow });
+    return follows;
+  }
 }
 
 module.exports = FollowService;

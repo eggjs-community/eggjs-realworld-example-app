@@ -27,6 +27,19 @@ describe('test/app/service/follow.test.js', () => {
     assert(result);
   });
 
+  it('is should ok', async () => {
+    let result = await followService.is({
+      followerUsername: username1,
+      followedUsername: username2,
+    });
+    assert(result);
+    result = await followService.is({
+      followerUsername: username1,
+      followedUsername: 'jeff123',
+    });
+    assert(result === null);
+  });
+
   it('unfollow should ok', async () => {
     const result = await followService.delete({
       followerUsername: username1,

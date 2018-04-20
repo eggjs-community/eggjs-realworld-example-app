@@ -7,11 +7,7 @@ class FollowController extends Controller {
     const { ctx, app } = this;
     const followerUsername = ctx.state.user.username;
     const followedUsername = ctx.params.username;
-    const followedUser = await ctx.service.user.findByUsername(followedUsername);
-
-    if (!followedUser) {
-      ctx.throw(404, 'followedUser not found');
-    }
+    await ctx.service.user.findByUsername(followedUsername);
 
     await ctx.service.follow.create({
       followerUsername,
@@ -37,6 +33,26 @@ class FollowController extends Controller {
     user.following = false;
     ctx.body = {
       profile: user,
+    };
+  }
+
+  async get() {
+    const { app, ctx } = this;
+    const tokenUser = app.verifyToken(ctx);
+    const profileUsername = ctx.params.username;
+    let following;
+    if (tokenUser) {
+      following = await ctx.service.follow.is({
+        followedUsername: profileUsername,
+        followerUsername: tokenUser.username,
+      });
+    }
+
+    const profileUser = await ctx.service.user.findByUsername(profileUsername);
+    delete profileUser.password;
+    profileUser.following = Boolean(following);
+    ctx.body = {
+      profile: profileUser,
     };
   }
 }

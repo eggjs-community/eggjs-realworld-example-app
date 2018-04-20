@@ -41,8 +41,8 @@ module.exports = {
         type: UUID,
         allowNull: false,
       },
-      createdAt: DATE,
-      updatedat: DATE,
+      created_at: DATE,
+      updated_at: DATE,
     });
   },
 
