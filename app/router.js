@@ -17,7 +17,7 @@ module.exports = app => {
    * @query ?tag=AngularJS, ?author=jake, ?favorited=jake, ?limit=20, ?offset=0
    */
   router.get('/articles', controller.article.getArticlesByQuery);
-  router.get('/articles/:slug', controller.article.getArticlesBySlug);
+  router.get('/articles/:slug', app.jwt, controller.article.getArticlesBySlug);
 
   /**
    * @feature 关注用户动态
@@ -27,4 +27,7 @@ module.exports = app => {
   router.post('/articles', app.jwt, controller.article.createAnArticle);
   router.put('/articles/:slug', app.jwt, controller.article.updateArticleBySlug);
   router.delete('/articles/:slug', app.jwt, controller.article.deleteArticleBySlug);
+  router.post('/articles/:slug/favorite', app.jwt, controller.article.favoriteArticle);
+  router.delete('/articles/:slug/favorite', app.jwt, controller.article.unFavoriteArticle);
+
 };

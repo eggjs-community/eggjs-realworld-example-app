@@ -14,9 +14,6 @@ module.exports = app => {
       type: UUID,
       unique: true,
       allowNull: false,
-      validate: {
-        isUUID: 4,
-      },
     },
     title: {
       type: STRING,
@@ -37,6 +34,10 @@ module.exports = app => {
       type: INTEGER,
       defaultValue: 0,
     },
+    favoriteUsers: {
+      type: JSON,
+      defaultValue: [],
+    },
     userId: {
       type: UUID,
       allowNull: false,
@@ -49,12 +50,13 @@ module.exports = app => {
   }, {
     indexes: [
       { unique: true, fields: [ 'slug' ], operator: 'index_articles_on_slug' },
-      { unique: true, fields: [ 'userId' ], operator: 'index_articles_on_user_id' },
+      // { unique: true, fields: [ 'userId' ], operator: 'index_articles_on_user_id' },
     ],
   });
 
   Article.prototype.associate = function() {
-    app.model.Article.belongsTo(app.model.User, { as: 'author', foreignKey: 'userId' });
+    // bug 关联无效
+    // app.model.Article.belongsTo(app.model.User, { foreignKey: 'userId' });
   };
 
   return Article;

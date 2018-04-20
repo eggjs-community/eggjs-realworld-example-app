@@ -39,6 +39,8 @@ module.exports = app => {
     // updatedAt: 'updatedAt',
     // createdAt: 'createdAt',
     tableName: 'users',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
   }, {
     indexes: [
       { unique: true, fields: [ 'email' ], operator: 'index_user_on_email' },
@@ -47,7 +49,9 @@ module.exports = app => {
   });
 
   User.prototype.associate = function() {
-    app.model.User.hasMany(app.model.Article, { as: 'articles', foreignKey: 'id' });
+    // bug 关联无效
+    // app.model.User.hasMany(app.model.Article, { as: 'articles', foreignKey: 'id' });
+
     // app.model.User.hasMany(app.model.Favorites, { as: 'favorites', foreignKey: 'id' });
     // app.model.User.hasMany(app.model.Comments, { as: 'comments', foreignKey: 'id' });
   };
