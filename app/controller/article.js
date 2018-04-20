@@ -3,6 +3,30 @@
 const Controller = require('egg').Controller;
 
 class ArticleController extends Controller {
+  async favoriteArticle() {
+    const { ctx, app, config, service } = this;
+    const { slug } = ctx.params;
+
+    const token = app.getToken(ctx);
+    const user = app.jwt.verify(token, config.jwt.secret);
+
+    const article = await service.article.favoriteArticle(user, slug);
+
+    ctx.body = article;
+  }
+
+  async unFavoriteArticle() {
+    const { ctx, app, config, service } = this;
+    const { slug } = ctx.params;
+
+    const token = app.getToken(ctx);
+    const user = app.jwt.verify(token, config.jwt.secret);
+
+    const article = await service.article.unFavoriteArticle(user, slug);
+
+    ctx.body = article;
+  }
+
   async getArticlesByQuery() {
     // todo
   }
@@ -13,7 +37,7 @@ class ArticleController extends Controller {
 
     const article = await service.article.getArticlesBySlug(slug);
 
-    ctx.body = article
+    ctx.body = article;
   }
 
 
@@ -41,7 +65,7 @@ class ArticleController extends Controller {
       tagList: {
         type: 'array',
       },
-    }
+    };
     ctx.validate(RULE_CREATE, data);
 
     const article = await service.article.createAnArticle({ userId, ...data });
@@ -53,7 +77,7 @@ class ArticleController extends Controller {
     const { slug } = ctx.params;
     const { article: data } = ctx.request.body;
 
-    ctx.validate({ slug: { type: 'string', required: true }}, ctx.params);
+    ctx.validate({ slug: { type: 'string', required: true } }, ctx.params);
 
     const article = await service.article.updateArticleBySlug(slug, data);
     ctx.body = article;
@@ -63,7 +87,7 @@ class ArticleController extends Controller {
     const { ctx, service } = this;
     const { slug } = ctx.params;
 
-    ctx.validate({ slug: { type: 'string', required: true }}, ctx.params);
+    ctx.validate({ slug: { type: 'string', required: true } }, ctx.params);
 
     const message = await service.article.deleteArticleBySlug(slug);
     ctx.body = message;
