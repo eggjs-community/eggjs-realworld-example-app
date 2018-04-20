@@ -37,8 +37,7 @@ module.exports = app => {
   }, {
     timestamps: true,
     tableName: 'users',
-    // createdAt: 'createdAt',
-    // updatedAt: 'updatedAt',
+    underscored: false,
   }, {
     indexes: [
       { unique: true, fields: [ 'email' ], operator: 'index_user_on_email' },
