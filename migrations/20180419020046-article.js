@@ -29,10 +29,10 @@ module.exports = {
         type: TEXT,
         allowNull: false,
       },
-      tagList: {
-        type: JSON,
-        defaultValue: [],
-      },
+      // tagList: {
+      //   type: JSON,
+      //   defaultValue: [],
+      // },
       favoritesCount: {
         type: INTEGER,
         defaultValue: 0,
