@@ -50,13 +50,13 @@ module.exports = app => {
   }, {
     indexes: [
       { unique: true, fields: [ 'slug' ], operator: 'index_articles_on_slug' },
-      { unique: true, fields: [ 'userId' ], operator: 'index_articles_on_user_id' },
+      // { unique: true, fields: [ 'userId' ], operator: 'index_articles_on_user_id' },
     ],
   });
 
   Article.prototype.associate = function() {
     // bug 关联无效
-    app.model.Article.belongsTo(app.model.User, { foreignKey: 'userId' });
+    // app.model.Article.belongsTo(app.model.User, { foreignKey: 'userId' });
   };
 
   return Article;
