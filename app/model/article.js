@@ -44,8 +44,8 @@ module.exports = app => {
     },
   }, {
     timestamps: true,
-    updatedAt: 'updatedAt',
-    createdAt: 'createdAt',
+    // updatedAt: 'updatedAt',
+    // createdAt: 'createdAt',
     tableName: 'articles',
   }, {
     indexes: [

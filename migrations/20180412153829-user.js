@@ -41,8 +41,8 @@ module.exports = {
         type: STRING,
         allowNull: false,
       },
-      createdAt: DATE,
-      updatedAt: DATE,
+      created_at: DATE,
+      updated_at: DATE,
     });
   },
 
