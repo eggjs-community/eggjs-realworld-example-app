@@ -7,7 +7,15 @@ module.exports = {
     return token;
   },
   getToken(ctx) {
-    return ctx.request.headers.authorization.split(' ')[1];
+    const authorization = ctx.request.headers.authorization;
+    if (!authorization) return null;
+    return authorization.split(' ')[1];
+  },
+  verifyToken(ctx) {
+    const { config } = this;
+    const token = this.getToken(ctx);
+    if (!token) return null;
+    return this.jwt.verify(token, config.jwt.secret);
   },
   getUserJson(user) {
     delete user.password;

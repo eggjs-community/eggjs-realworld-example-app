@@ -23,9 +23,20 @@ describe('test/app/controller/follow.test.js', () => {
     const res = await app.httpRequest()
       .post(`/profiles/${username2}/follow`)
       .set('Authorization', `Bearer ${token}`);
-    console.log(res.body);
-    assert(res.body.profile.following);
+    assert(res.body.profile.following === true);
     assert(res.body.profile.username === username1);
+  });
+
+  it('is should ok', async () => {
+    let res = await app.httpRequest()
+      .get(`/profiles/${username2}`)
+      .set('Authorization', `Bearer ${token}`);
+    assert(res.body.profile.following === true);
+    assert(res.body.profile.username === username2);
+    res = await app.httpRequest()
+      .get(`/profiles/${username2}`);
+    assert(res.body.profile.following === false);
+    assert(res.body.profile.username === username2);
   });
 
   it('unfollow should ok', async () => {

@@ -11,6 +11,7 @@ module.exports = app => {
   router.put('/user', app.jwt, controller.user.update);
   router.post('/profiles/:username/follow', app.jwt, controller.follow.create);
   router.delete('/profiles/:username/follow', app.jwt, controller.follow.delete);
+  router.get('/profiles/:username', controller.follow.get);
 
   /**
    * @feature query 条件参数查询

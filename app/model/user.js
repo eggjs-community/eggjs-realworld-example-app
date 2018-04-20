@@ -15,7 +15,7 @@ module.exports = app => {
       unique: true,
       allowNull: false,
       validate: {
-        is: /^[a-zA-Z]{1}([a-zA-Z0-9]|[._]){4,19}$/i,
+        is: /^[a-zA-Z]{1}([a-zA-Z0-9]|[._]){1,19}$/i,
         isLowercase: true,
       },
     },
@@ -36,11 +36,9 @@ module.exports = app => {
     },
   }, {
     timestamps: true,
-    // updatedAt: 'updatedAt',
-    // createdAt: 'createdAt',
     tableName: 'users',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
+    // createdAt: 'createdAt',
+    // updatedAt: 'updatedAt',
   }, {
     indexes: [
       { unique: true, fields: [ 'email' ], operator: 'index_user_on_email' },
