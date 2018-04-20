@@ -1,11 +1,12 @@
 'use strict';
 
 const Controller = require('egg').Controller;
+const uuidv1 = require('uuid/v1');
 
 class UserController extends Controller {
   async get() {
     const { ctx, app } = this;
-    const { username } = this.ctx.state.user;
+    const { username } = ctx.state.user;
 
     const user = await this.service.user.findByUsername(username);
     ctx.body = {
@@ -16,7 +17,7 @@ class UserController extends Controller {
   async update() {
     const { ctx, app } = this;
     const user = ctx.request.body.user;
-    const { username } = this.ctx.state.user;
+    const { username } = ctx.state.user;
 
     ctx.validate({
       email: { type: 'email', required: false },
@@ -68,10 +69,12 @@ class UserController extends Controller {
 
     const email = user.email;
     const password = ctx.helper.bhash(user.password);
-    const { id, username } = user;
+    const { username } = user;
+    const id = uuidv1();
     const newUser = {
       username,
       email,
+      id,
       password,
     };
 
