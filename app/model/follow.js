@@ -16,8 +16,7 @@ module.exports = app => {
     },
   }, {
     timestamps: true,
-    // updatedAt: 'updatedAt',
-    // createdAt: 'createdAt',
+    underscored: false,
     tableName: 'follows',
   }, {
     indexes: [

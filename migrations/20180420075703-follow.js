@@ -21,8 +21,8 @@ module.exports = {
         primaryKey: true,
         allowNull: false,
       },
-      created_at: DATE,
-      updated_at: DATE,
+      createdAt: DATE,
+      updatedAt: DATE,
     });
   },
 
