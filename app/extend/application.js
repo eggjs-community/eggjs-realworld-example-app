@@ -1,9 +1,9 @@
 'use strict';
 
 module.exports = {
-  generateJWT(id, username) {
+  generateJWT(username) {
     const { config } = this;
-    const token = this.jwt.sign({ id, username }, config.jwt.secret);
+    const token = this.jwt.sign({ username }, config.jwt.secret);
     return token;
   },
   getToken(ctx) {
@@ -19,7 +19,7 @@ module.exports = {
   },
   getUserJson(user) {
     delete user.password;
-    user.token = this.generateJWT(user.id, user.username);
+    user.token = this.generateJWT(user.username);
     return user;
   },
 };

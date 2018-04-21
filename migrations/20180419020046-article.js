@@ -2,17 +2,13 @@
 
 module.exports = {
   up(queryInterface, Sequelize) {
-    const { STRING, DATE, UUID, UUIDV4, TEXT, INTEGER } = Sequelize;
-    return queryInterface.createTable('article', {
-      id: {
-        type: UUID,
-        defaultValue: UUIDV4,
-        allowNull: false,
-        primaryKey: true,
-      },
+    const { STRING, JSON, DATE, UUID, UUIDV4, TEXT, INTEGER } = Sequelize;
+    return queryInterface.createTable('articles', {
       slug: {
         type: UUID,
         unique: true,
+        primaryKey: true,
+        defaultValue: UUIDV4,
         allowNull: false,
         validate: {
           isUUID: 4,
@@ -29,16 +25,16 @@ module.exports = {
         type: TEXT,
         allowNull: false,
       },
-      // tagList: {
-      //   type: JSON,
-      //   defaultValue: [],
-      // },
+      tagList: {
+        type: JSON,
+        defaultValue: [],
+      },
       favoritesCount: {
         type: INTEGER,
         defaultValue: 0,
       },
-      userId: {
-        type: UUID,
+      username: {
+        type: STRING,
         allowNull: false,
       },
       createdAt: DATE,
@@ -47,6 +43,6 @@ module.exports = {
   },
 
   down(queryInterface) {
-    return queryInterface.dropTable('article');
+    return queryInterface.dropTable('articles');
   },
 };

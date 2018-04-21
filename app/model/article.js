@@ -4,15 +4,11 @@ module.exports = app => {
   const { STRING, TEXT, INTEGER, JSON, UUID, UUIDV4 } = app.Sequelize;
 
   const Article = app.model.define('article', {
-    id: {
-      type: UUID,
-      defaultValue: UUIDV4,
-      allowNull: false,
-      primaryKey: true,
-    },
     slug: {
       type: UUID,
       unique: true,
+      primaryKey: true,
+      defaultValue: UUIDV4,
       allowNull: false,
     },
     title: {
@@ -38,24 +34,18 @@ module.exports = app => {
       type: JSON,
       defaultValue: [],
     },
-    userId: {
-      type: UUID,
+    username: {
+      type: STRING,
       allowNull: false,
     },
   }, {
     timestamps: true,
     underscored: false,
     tableName: 'articles',
-  }, {
-    indexes: [
-      { unique: true, fields: [ 'slug' ], operator: 'index_articles_on_slug' },
-      // { unique: true, fields: [ 'userId' ], operator: 'index_articles_on_user_id' },
-    ],
   });
 
-  Article.prototype.associate = function() {
-    // bug 关联无效
-    // app.model.Article.belongsTo(app.model.User, { foreignKey: 'userId' });
+  Article.associate = function() {
+    app.model.Article.belongsTo(app.model.User, { as: 'author', foreignKey: 'username' });
   };
 
   return Article;

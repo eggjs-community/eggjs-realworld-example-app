@@ -6,107 +6,102 @@ const R = require('ramda');
 
 const articlePick = [ 'slug', 'title', 'description', 'body', 'tagList', 'updatedAt', 'createdAt', 'favoritesCount' ];
 
-module.exports = app => {
-  // 表关联定义
-  app.model.User.hasMany(app.model.Article, { foreignKey: 'id' });
-  app.model.Article.belongsTo(app.model.User, { foreignKey: 'userId' });
+class ArticleService extends Service {
+  mergeArticleForFavorite(username, article) {
+    const favorited = !!article.favoriteUsers.find(name => name === username);
+    return R.compose(
+      R.omit([ 'favoriteUsers' ]),
+      R.merge({ favorited })
+    )(article);
+  }
 
-  return class ArticleService extends Service {
-    mergeArticleForFavorite(username, article) {
-      const favorited = !!article.favoriteUsers.find(name => name === username);
-      return R.compose(
-        R.omit([ 'favoriteUsers' ]),
-        R.merge({ favorited })
-      )(article);
-    }
+  async favoriteArticle({ username }, slug) {
+    const { ctx } = this;
 
-    async favoriteArticle({ username }, slug) {
-      const { ctx } = this;
+    const articleRow = await ctx.model.Article.findOne({
+      where: { slug },
+    });
 
-      const articleRow = await ctx.model.Article.findOne({
-        where: { slug },
-      });
+    const updatedData = await R.compose(
+      list => articleRow.update({ favoriteUsers: list }),
+      R.append(username),
+      row => row.get('favoriteUsers')
+    )(articleRow)
+      .then(row => row && row.toJSON());
 
-      const updatedData = await R.compose(
-        list => articleRow.update({ favoriteUsers: list }),
-        R.append(username),
-        row => row.get('favoriteUsers')
-      )(articleRow)
-        .then(row => row && row.toJSON());
+    return this.mergeArticleForFavorite(username, updatedData);
+  }
 
-      return this.mergeArticleForFavorite(username, updatedData);
-    }
+  async unFavoriteArticle({ username }, slug) {
+    const { ctx } = this;
 
-    async unFavoriteArticle({ username }, slug) {
-      const { ctx } = this;
+    const articleRow = await ctx.model.Article.findOne({
+      where: { slug },
+    });
 
-      const articleRow = await ctx.model.Article.findOne({
-        where: { slug },
-      });
+    const updatedData = await R.compose(
+      list => articleRow.update({ favoriteUsers: list }),
+      R.filter(name => name !== username),
+      row => row.get('favoriteUsers')
+    )(articleRow)
+      .then(row => row && row.toJSON());
 
-      const updatedData = await R.compose(
-        list => articleRow.update({ favoriteUsers: list }),
-        R.filter(name => name !== username),
-        row => row.get('favoriteUsers')
-      )(articleRow)
-        .then(row => row && row.toJSON());
+    return this.mergeArticleForFavorite(username, updatedData);
+  }
 
-      return this.mergeArticleForFavorite(username, updatedData);
-    }
+  async getArticlesByQuery(query) {
+    console.log(query);
+  }
 
-    async getArticlesByQuery(query) {
-      console.log(query);
-    }
+  async getArticlesBySlug(slug) {
+    const { ctx } = this;
 
-    async getArticlesBySlug(slug) {
-      const { ctx } = this;
-
-      const [ articleRow ] = await ctx.model.Article.findAll({
-        attributes: [ ...articlePick, 'id', 'favoriteUsers' ],
-        where: { slug },
-        include: [
-          { model: ctx.model.User, attributes: [ 'username', 'bio', 'image' ] },
-        ],
-      });
+    const [ articleRow ] = await ctx.model.Article.findAll({
+      attributes: [ ...articlePick, 'id', 'favoriteUsers' ],
+      where: { slug },
+      include: [
+        { model: ctx.model.User, attributes: [ 'username', 'bio', 'image' ] },
+      ],
+    });
 
       // console.log(articleRow.toJSON())
-      return articleRow.toJSON();
-    }
+    return articleRow.toJSON();
+  }
 
-    async getArticlesByFeed(follows) {
-      console.log(follows);
-    }
+  async getArticlesByFeed(follows) {
+    console.log(follows);
+  }
 
-    async createAnArticle(data) {
-      const { ctx } = this;
-      const slug = UUID(data.title);
+  async create(data) {
+    const { ctx } = this;
+    data.slug = UUID(data.title);
+    const article = await ctx.model.Article.create(data);
+    return ctx.model.Article.findById(article.slug, {
+      include: [
+        { model: ctx.model.User, as: 'author', attributes: [ 'username', 'bio', 'image' ] },
+      ],
+    });
+  }
 
-      const pick = R.pick(articlePick);
+  async updateArticleBySlug(slug, data) {
+    const { ctx } = this;
 
-      const articleData = await ctx.model.Article.create({ slug, ...data })
-        .then(R.compose(pick, row => row && row.toJSON()));
-        // .catch(e => ctx.throw(444, 'createAnArticle fail'));
-      return articleData;
-    }
+    const pick = R.pick(articlePick);
 
-    async updateArticleBySlug(slug, data) {
-      const { ctx } = this;
+    const [ updateCount, [ updateRow ]] = await ctx.model.Article.update(data, { where: { slug }, individualHooks: true });
+    if (updateCount < 1) ctx.throw(444, 'updateArticleBySlug fail');
 
-      const pick = R.pick(articlePick);
+    return R.compose(pick, row => row && row.toJSON())(updateRow);
+  }
 
-      const [ updateCount, [ updateRow ]] = await ctx.model.Article.update(data, { where: { slug }, individualHooks: true });
-      if (updateCount < 1) ctx.throw(444, 'updateArticleBySlug fail');
+  async deleteArticleBySlug(slug) {
+    const { ctx } = this;
 
-      return R.compose(pick, row => row && row.toJSON())(updateRow);
-    }
+    const deleteCount = await ctx.model.Article.destroy({ where: { slug } });
+    if (deleteCount < 1) throw new Error('deleteArticleBySlug fail');
 
-    async deleteArticleBySlug(slug) {
-      const { ctx } = this;
+    return 'delete success';
+  }
+}
 
-      const deleteCount = await ctx.model.Article.destroy({ where: { slug } });
-      if (deleteCount < 1) throw new Error('deleteArticleBySlug fail');
-
-      return 'delete success';
-    }
-  };
-};
+return ArticleService;

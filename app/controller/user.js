@@ -1,7 +1,6 @@
 'use strict';
 
 const Controller = require('egg').Controller;
-const uuidv1 = require('uuid/v1');
 
 class UserController extends Controller {
   async get() {
@@ -70,11 +69,9 @@ class UserController extends Controller {
     const email = user.email;
     const password = ctx.helper.bhash(user.password);
     const { username } = user;
-    const id = uuidv1();
     const newUser = {
       username,
       email,
-      id,
       password,
     };
 
@@ -83,7 +80,7 @@ class UserController extends Controller {
     ctx.body = {
       user: {
         email,
-        token: app.generateJWT(id, username),
+        token: app.generateJWT(username),
         username,
       },
     };

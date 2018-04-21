@@ -43,10 +43,10 @@ class ArticleController extends Controller {
     // todo
   }
 
-  async createAnArticle() {
+  async create() {
     const { ctx, service } = this;
     const { article: data } = ctx.request.body;
-    const { id: userId } = ctx.state.user;
+    const { username } = ctx.state.user;
 
     const RULE_CREATE = {
       title: {
@@ -66,7 +66,7 @@ class ArticleController extends Controller {
     };
     ctx.validate(RULE_CREATE, data);
 
-    const article = await service.article.createAnArticle({ userId, ...data });
+    const article = await service.article.create({ username, ...data });
     ctx.body = article;
   }
 
