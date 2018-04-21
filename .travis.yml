@@ -1,7 +1,7 @@
 sudo: false
 language: node_js
 node_js:
-  - '8'
+  - 'latest'
 notifications:
   webhooks: https://www.travisbuddy.com/
   on_success: never
@@ -17,3 +17,10 @@ after_script:
   - npminstall codecov && codecov
 services:
   - mysql
+addons:
+  apt:
+    sources:
+      - mysql-5.7-trusty
+    packages:
+      - mysql-server
+      - mysql-client
