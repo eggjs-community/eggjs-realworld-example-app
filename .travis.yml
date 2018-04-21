@@ -1,7 +1,7 @@
 sudo: false
 language: node_js
 node_js:
-  - 'latest'
+  - '9'
 notifications:
   webhooks: https://www.travisbuddy.com/
   on_success: never
