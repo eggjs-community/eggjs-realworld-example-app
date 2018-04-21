@@ -53,19 +53,15 @@ class ArticleService extends Service {
     console.log(query);
   }
 
-  async getArticlesBySlug(slug) {
+  async get(slug) {
     const { ctx } = this;
-
-    const [ articleRow ] = await ctx.model.Article.findAll({
-      attributes: [ ...articlePick, 'id', 'favoriteUsers' ],
-      where: { slug },
+    const article = await ctx.model.Article.findById(slug, {
+      attributes: [ ...articlePick ],
       include: [
-        { model: ctx.model.User, attributes: [ 'username', 'bio', 'image' ] },
+        { model: ctx.model.User, as: 'author', attributes: [ 'username', 'bio', 'image' ] },
       ],
     });
-
-      // console.log(articleRow.toJSON())
-    return articleRow.toJSON();
+    return article;
   }
 
   async getArticlesByFeed(follows) {
@@ -77,6 +73,7 @@ class ArticleService extends Service {
     data.slug = UUID(data.title);
     const article = await ctx.model.Article.create(data);
     return ctx.model.Article.findById(article.slug, {
+      attributes: [ ...articlePick ],
       include: [
         { model: ctx.model.User, as: 'author', attributes: [ 'username', 'bio', 'image' ] },
       ],

@@ -29,13 +29,20 @@ class ArticleController extends Controller {
     // todo
   }
 
-  async getArticlesBySlug() {
-    const { ctx, service } = this;
+  async get() {
+    const { ctx, service, app } = this;
     const { slug } = ctx.params;
-
-    const article = await service.article.getArticlesBySlug(slug);
-
-    ctx.body = article;
+    const article = await service.article.get(slug);
+    const tokenUser = app.verifyToken(ctx);
+    let following = false;
+    if (tokenUser) {
+      following = await ctx.service.follow.is({
+        followedUsername: article.author.username,
+        followerUsername: tokenUser.username,
+      });
+    }
+    article.author.dataValues.following = !!following;
+    ctx.body = { article };
   }
 
 
@@ -67,7 +74,7 @@ class ArticleController extends Controller {
     ctx.validate(RULE_CREATE, data);
 
     const article = await service.article.create({ username, ...data });
-    ctx.body = article;
+    ctx.body = { article };
   }
 
   async updateArticleBySlug() {

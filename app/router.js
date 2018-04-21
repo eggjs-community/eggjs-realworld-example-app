@@ -18,7 +18,7 @@ module.exports = app => {
    * @query ?tag=AngularJS, ?author=jake, ?favorited=jake, ?limit=20, ?offset=0
    */
   router.get('/articles', controller.article.getArticlesByQuery);
-  router.get('/articles/:slug', app.jwt, controller.article.getArticlesBySlug);
+  router.get('/articles/:slug', controller.article.get);
 
   /**
    * @feature 关注用户动态
