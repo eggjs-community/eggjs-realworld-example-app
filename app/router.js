@@ -25,7 +25,7 @@ module.exports = app => {
    * @query ?limit=20, ?offset=0
    */
   router.get('/articles/feed', app.jwt, controller.article.getArticlesByFeed);
-  router.post('/articles', app.jwt, controller.article.createAnArticle);
+  router.post('/articles', app.jwt, controller.article.create);
   router.put('/articles/:slug', app.jwt, controller.article.updateArticleBySlug);
   router.delete('/articles/:slug', app.jwt, controller.article.deleteArticleBySlug);
   router.post('/articles/:slug/favorite', app.jwt, controller.article.favoriteArticle);

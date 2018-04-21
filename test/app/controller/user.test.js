@@ -7,7 +7,6 @@ describe('test/app/controller/user.test.js', () => {
   const password = '123456';
   const username = 'user' + new Date().getTime();
   const email = `${username}@qq.com`;
-  const id = '69bc33ad-fbfb-4f55-b85a-38f162fd3836';
 
   const assertUser = user => {
     assert(user.token);
@@ -16,13 +15,13 @@ describe('test/app/controller/user.test.js', () => {
   };
 
   it('register should ok', async () => {
-    const res = await app.httpRequest().post('/users').send({ user: { id, password, email, username } });
+    const res = await app.httpRequest().post('/users').send({ user: { password, email, username } });
     token = res.body.user.token;
     assertUser(res.body.user);
   });
 
   it('login should ok', async () => {
-    const res = await app.httpRequest().post('/users/login').send({ user: { id, email, password } });
+    const res = await app.httpRequest().post('/users/login').send({ user: { email, password } });
     assert(res.body.user);
   });
 

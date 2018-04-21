@@ -3,7 +3,7 @@
 module.exports = {
   up(queryInterface, Sequelize) {
     const { STRING, DATE, UUID, UUIDV4, TEXT, INTEGER } = Sequelize;
-    return queryInterface.createTable('article', {
+    return queryInterface.createTable('articles', {
       id: {
         type: UUID,
         defaultValue: UUIDV4,
@@ -47,6 +47,6 @@ module.exports = {
   },
 
   down(queryInterface) {
-    return queryInterface.dropTable('article');
+    return queryInterface.dropTable('articles');
   },
 };

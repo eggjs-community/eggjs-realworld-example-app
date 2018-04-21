@@ -11,8 +11,7 @@
     "egg-sequelize": "^3.1.3",
     "egg-validate": "^1.0.0",
     "mysql2": "^1.5.3",
-    "ramda": "^0.25.0",
-    "uuid": "^3.2.1"
+    "ramda": "^0.25.0"
   },
   "devDependencies": {
     "all-contributors-cli": "^4.11.1",
@@ -30,7 +29,8 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-eggjs-realworld-example-app",
+    "start":
+      "egg-scripts start --daemon --title=egg-server-eggjs-realworld-example-app",
     "stop": "egg-scripts stop --title=egg-server-eggjs-realworld-example-app",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
