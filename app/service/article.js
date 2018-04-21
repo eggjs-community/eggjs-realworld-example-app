@@ -104,4 +104,4 @@ class ArticleService extends Service {
   }
 }
 
-return ArticleService;
+module.exports = ArticleService;
