@@ -1,15 +1,9 @@
 'use strict';
 
 module.exports = app => {
-  const { STRING, UUID, UUIDV4 } = app.Sequelize;
+  const { STRING } = app.Sequelize;
 
   const User = app.model.define('user', {
-    // id: {
-    //   type: UUID,
-    //   defaultValue: UUIDV4,
-    //   allowNull: false,
-    //   primaryKey: true,
-    // },
     username: {
       type: STRING,
       unique: true,
