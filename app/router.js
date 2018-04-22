@@ -17,7 +17,7 @@ module.exports = app => {
    * @feature query 条件参数查询
    * @query ?tag=AngularJS, ?author=jake, ?favorited=jake, ?limit=20, ?offset=0
    */
-  router.get('/articles', controller.article.getArticlesByQuery);
+  router.get('/articles', controller.article.getByQuery);
   router.get('/articles/:slug', controller.article.get);
 
   /**
@@ -30,5 +30,4 @@ module.exports = app => {
   router.delete('/articles/:slug', app.jwt, controller.article.delete);
   router.post('/articles/:slug/favorite', app.jwt, controller.article.favoriteArticle);
   router.delete('/articles/:slug/favorite', app.jwt, controller.article.unFavoriteArticle);
-
 };

@@ -49,25 +49,22 @@ class ArticleService extends Service {
     return this.mergeArticleForFavorite(username, updatedData);
   }
 
-  async getByQuery({ offset = 0, limit = 10, order_by = 'createdAt', order = 'ASC' }) {
-    const { ctx, app } = this;
-    const tokenUser = app.verifyToken(ctx);
-    const includeFollow = tokenUser ? {
-      model: ctx.model.Follow,
-      where: { userId: tokenUser.id },
-    } : [];
-
+  async getByQuery({ offset = 0, limit = 10, order_by = 'createdAt', order = 'ASC', author = '' }) {
+    const { ctx } = this;
     return ctx.model.Article.findAndCountAll({
       offset,
       limit,
       order: [[ order_by, order.toUpperCase() ]],
-      attributes: [ ...articlePick, 'userId' ],
+      attributes: [ ...articlePick ],
       include: [
         {
           model: ctx.model.User,
           as: 'author',
           attributes: [ 'username', 'bio', 'image' ],
-          include: includeFollow,
+          where: author ? { username: author } : {},
+          include: [{
+            model: ctx.model.Follow,
+          }],
         },
         {
           model: ctx.model.ArticleTag,

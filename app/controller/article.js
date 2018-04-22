@@ -26,11 +26,13 @@ class ArticleController extends Controller {
   }
 
   async getByQuery() {
-    const { ctx } = this;
-    const articles = await ctx.service.article.getByQuery({});
-    console.log(articles);
-    ctx.body = { articles };
-    // todo
+    const { ctx, app } = this;
+    const user = app.verifyToken(ctx);
+    const userId = user && user.id;
+    let articles = await ctx.service.article.getByQuery({ ...ctx.request.query, userId });
+    const articlesCount = articles.count;
+    articles = articles.rows.map(article => app.getArticleJson(article, userId));
+    ctx.body = { articles, articlesCount };
   }
 
   async get() {
