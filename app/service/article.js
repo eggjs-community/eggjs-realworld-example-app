@@ -56,6 +56,7 @@ class ArticleService extends Service {
       limit,
       order: [[ order_by, order.toUpperCase() ]],
       attributes: [ ...articlePick ],
+      distinct: true, // Ref: http://t.cn/RuLhRvW
       include: [
         {
           model: ctx.model.User,
