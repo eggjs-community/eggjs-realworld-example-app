@@ -29,19 +29,18 @@ class ArticleController extends Controller {
     // todo
   }
 
-  async get() {
+  async get(slug) {
     const { ctx, service, app } = this;
-    const { slug } = ctx.params;
-    const article = await service.article.get(slug);
+    slug = ctx.params || slug;
+    let article = await service.article.get(slug);
+    article = article.get();
     const tokenUser = app.verifyToken(ctx);
     let following = false;
     if (tokenUser) {
-      following = await ctx.service.follow.is({
-        followedUsername: article.author.username,
-        followerUsername: tokenUser.username,
-      });
+      following = await ctx.service.follow.is(tokenUser.userId, article.author.username);
     }
     article.author.dataValues.following = !!following;
+    article.tagList = article.tagList.map(tag => tag.tag.name);
     ctx.body = { article };
   }
 
@@ -74,29 +73,36 @@ class ArticleController extends Controller {
     };
     ctx.validate(RULE_CREATE, data);
 
-    const article = await service.article.create(data, userId);
+    let article = await service.article.create(data, userId);
+    article = article.get();
+    article.author.dataValues.following = false;
+    article.tagList = article.tagList.map(tag => tag.tag.name);
     ctx.body = { article };
   }
 
-  async updateArticleBySlug() {
+  async update() {
     const { ctx, service } = this;
     const { slug } = ctx.params;
     const { article: data } = ctx.request.body;
 
     ctx.validate({ slug: { type: 'string', required: true } }, ctx.params);
 
-    const article = await service.article.updateArticleBySlug(slug, data);
-    ctx.body = article;
+    let article = await service.article.update(slug, data);
+    article = article.get();
+    article.author.dataValues.following = false;
+    article.tagList = article.tagList.map(tag => tag.tag.name);
+    ctx.body = { article };
   }
 
-  async deleteArticleBySlug() {
+  async delete() {
     const { ctx, service } = this;
     const { slug } = ctx.params;
 
     ctx.validate({ slug: { type: 'string', required: true } }, ctx.params);
 
-    const message = await service.article.deleteArticleBySlug(slug);
-    ctx.body = message;
+    const result = await service.article.delete(slug);
+    const message = result ? 'succeed' : 'failed';
+    ctx.body = { message };
   }
 }
 

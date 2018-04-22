@@ -4,7 +4,7 @@ const Service = require('egg').Service;
 const UUID = require('uuid/v1');
 const R = require('ramda');
 
-const articlePick = [ 'slug', 'title', 'description', 'body', 'tagList', 'updatedAt', 'createdAt', 'favoritesCount' ];
+const articlePick = [ 'slug', 'title', 'description', 'body', 'updatedAt', 'createdAt' ];
 
 class ArticleService extends Service {
   mergeArticleForFavorite(username, article) {
@@ -55,13 +55,27 @@ class ArticleService extends Service {
 
   async get(slug) {
     const { ctx } = this;
-    const article = await ctx.model.Article.findById(slug, {
+    slug = ctx.params.slug || slug;
+    const result = await ctx.model.Article.find({ where: { slug },
       attributes: [ ...articlePick ],
       include: [
-        { model: ctx.model.User, as: 'author', attributes: [ 'username', 'bio', 'image' ] },
+        {
+          model: ctx.model.User,
+          as: 'author',
+          attributes: [ 'username', 'bio', 'image' ],
+        },
+        {
+          model: ctx.model.ArticleTag,
+          as: 'tagList',
+          include: [
+            {
+              model: ctx.model.Tag,
+            },
+          ] },
       ],
     });
-    return article;
+
+    return result;
   }
 
   async getArticlesByFeed(follows) {
@@ -71,33 +85,35 @@ class ArticleService extends Service {
   async create(data, userId) {
     const { ctx } = this;
     data.slug = UUID(data.title);
-    const article = await ctx.model.Article.create({ ...data, userId });
-    return ctx.model.Article.findById(article.slug, {
-      attributes: [ ...articlePick ],
-      include: [
-        { model: ctx.model.User, as: 'author', attributes: [ 'username', 'bio', 'image' ] },
-      ],
-    });
+    const { title, description, body } = data;
+    const article = await ctx.model.Article.create({ title, description, body, userId });
+    const tags = await Promise.all(
+      data.tagList.map(tag => {
+        return ctx.model.Tag.findOrCreate({ where: { name: tag } });
+      })
+    );
+
+    await Promise.all(
+      tags.map(tag => {
+        return ctx.model.ArticleTag.create({
+          articleId: article.id,
+          tagId: tag[0].id,
+        });
+      })
+    );
+
+    return this.get(article.slug);
   }
 
-  async updateArticleBySlug(slug, data) {
+  async update(slug, data) {
     const { ctx } = this;
-
-    const pick = R.pick(articlePick);
-
-    const [ updateCount, [ updateRow ]] = await ctx.model.Article.update(data, { where: { slug }, individualHooks: true });
-    if (updateCount < 1) ctx.throw(444, 'updateArticleBySlug fail');
-
-    return R.compose(pick, row => row && row.toJSON())(updateRow);
+    await ctx.model.Article.update(data, { where: { slug }, individualHooks: true });
+    return this.get(slug);
   }
 
-  async deleteArticleBySlug(slug) {
+  async delete(slug) {
     const { ctx } = this;
-
-    const deleteCount = await ctx.model.Article.destroy({ where: { slug } });
-    if (deleteCount < 1) throw new Error('deleteArticleBySlug fail');
-
-    return 'delete success';
+    return await ctx.model.Article.destroy({ where: { slug } });
   }
 }
 
