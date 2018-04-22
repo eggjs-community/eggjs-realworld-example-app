@@ -27,11 +27,10 @@ describe('test/app/controller/follow.test.js', () => {
     assert(res.body.profile.username === username2);
   });
 
-  it('is should ok', async () => {
+  it('get should ok', async () => {
     let res = await app.httpRequest()
       .get(`/profiles/${username2}`)
       .set('Authorization', `Bearer ${token}`);
-    console.log(res.body.profile);
     assert(res.body.profile.following === true);
     assert(res.body.profile.username === username2);
     res = await app.httpRequest()

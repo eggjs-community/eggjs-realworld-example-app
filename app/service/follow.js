@@ -8,7 +8,7 @@ class FollowService extends Service {
     if (!follows) {
       this.ctx.throw(404, 'followUser not found');
     }
-    await this.ctx.model.Follow.create({ userId, followId: follows.id });
+    await this.ctx.model.Follow.findOrCreate({ where: { userId: follows.id, followId: userId } });
     return follows;
   }
 
@@ -19,22 +19,25 @@ class FollowService extends Service {
     }
     await this.ctx.model.Follow.destroy({
       where: {
-        userId,
-        followId: follows.id,
+        userId: follows.id,
+        followId: userId,
       },
     });
 
     return follows;
   }
 
-  async is(userId, profileUsername) {
+  async get(userId, profileUsername) {
     const { ctx } = this;
-    if (!userId) {
-      return false;
-    }
-    const profile = await ctx.service.user.findByUsername(profileUsername);
-    const result = await ctx.model.Follow.find({ where: { userId, followId: profile.id } });
-    return !!result;
+    const profile = await ctx.model.User.find({
+      where: { username: profileUsername },
+      include: [
+        {
+          model: ctx.model.Follow,
+        },
+      ],
+    });
+    return profile;
   }
 }
 

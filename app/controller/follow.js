@@ -29,8 +29,8 @@ class FollowController extends Controller {
     const user = app.verifyToken(ctx);
     const profileUsername = ctx.params.username;
     const userId = user && user.id;
-    const following = await ctx.service.follow.is(userId, profileUsername);
-    const profileUser = await ctx.service.user.findByUsername(profileUsername);
+    const profileUser = await ctx.service.follow.get(userId, profileUsername);
+    const following = profileUser.follows.some(follow => follow.followId === userId);
     ctx.body = {
       profile: app.getProfileJson(profileUser, following),
     };

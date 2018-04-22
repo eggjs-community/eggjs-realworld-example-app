@@ -26,9 +26,9 @@ describe('test/app/service/follow.test.js', () => {
     assert(result.username === username2);
   });
 
-  it('is should ok', async () => {
-    const result = await followService.is(userId, username2);
-    assert(result);
+  it('get should ok', async () => {
+    const result = await followService.get(userId, username2);
+    assert(result.username === username2);
   });
 
   it('unfollow should ok', async () => {
