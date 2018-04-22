@@ -14,8 +14,8 @@ module.exports = appInfo => {
     getToken(ctx) {
       if (
         ctx.headers.authorization &&
-        ctx.headers.authorization.split(' ')[0] === 'Bearer' ||
-        ctx.headers.authorization.split(' ')[0] === 'Token'
+        (ctx.headers.authorization.split(' ')[0] === 'Bearer' ||
+        ctx.headers.authorization.split(' ')[0] === 'Token')
       ) {
         return ctx.headers.authorization.split(' ')[1];
       } else if (ctx.query && ctx.query.token) {

@@ -1,29 +1,27 @@
 'use strict';
 
 module.exports = app => {
-  const { STRING } = app.Sequelize;
+  const { INTEGER } = app.Sequelize;
 
   const Follow = app.model.define('follow', {
-    followerUsername: {
-      type: STRING,
+    userId: {
+      type: INTEGER,
       allowNull: false,
       primaryKey: true,
     },
-    followedUsername: {
-      type: STRING,
-      primaryKey: true,
+    followId: {
+      type: INTEGER,
       allowNull: false,
+      primaryKey: true,
     },
   }, {
     timestamps: true,
     underscored: false,
     tableName: 'follows',
-  }, {
-    indexes: [
-    ],
   });
 
-  Follow.prototype.associate = function() {
+  Follow.associate = function() {
+    app.model.Follow.belongsToMany(app.model.User, { through: 'follow', foreignKey: 'userId' });
   };
 
   return Follow;
