@@ -5,18 +5,18 @@ const Controller = require('egg').Controller;
 class UserController extends Controller {
   async get() {
     const { ctx, app } = this;
-    const { username } = ctx.state.user;
+    const { id } = ctx.state.user;
 
-    const user = await this.service.user.findByUsername(username);
+    const user = await this.service.user.findById(id);
     ctx.body = {
-      user: app.getUserJson(user),
+      user: app.getUserJson(user, ctx),
     };
   }
 
   async update() {
     const { ctx, app } = this;
     const user = ctx.request.body.user;
-    const { username } = ctx.state.user;
+    const { id } = ctx.state.user;
 
     ctx.validate({
       email: { type: 'email', required: false },
@@ -25,11 +25,9 @@ class UserController extends Controller {
       image: { type: 'string', required: false },
       username: { type: 'string', required: false },
     }, user);
-
-    let existUser = await ctx.service.user.update(user, username);
-    existUser = existUser.dataValues;
+    const existUser = await ctx.service.user.update(user, id);
     ctx.body = {
-      user: app.getUserJson(existUser),
+      user: app.getUserJson(existUser, ctx),
     };
   }
 
@@ -44,7 +42,6 @@ class UserController extends Controller {
     }, user);
 
     const existUser = await ctx.service.user.findByEmail(email);
-
     if (!ctx.helper.bcompare(password, existUser.password)) {
       ctx.status = 400;
       ctx.body = { error: 'password is invalid' };
@@ -52,7 +49,7 @@ class UserController extends Controller {
     }
 
     ctx.body = {
-      user: app.getUserJson(existUser),
+      user: app.getUserJson(existUser, ctx),
     };
   }
 
@@ -75,14 +72,10 @@ class UserController extends Controller {
       password,
     };
 
-    await ctx.service.user.create(newUser);
+    const result = await ctx.service.user.create(newUser);
     ctx.status = 201;
     ctx.body = {
-      user: {
-        email,
-        token: app.generateJWT(username),
-        username,
-      },
+      user: app.getUserJson(result, ctx),
     };
   }
 }

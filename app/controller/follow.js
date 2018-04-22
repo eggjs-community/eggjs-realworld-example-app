@@ -3,56 +3,37 @@
 const Controller = require('egg').Controller;
 
 class FollowController extends Controller {
-  async create() {
+  async follow() {
     const { ctx, app } = this;
-    const followerUsername = ctx.state.user.username;
-    const followedUsername = ctx.params.username;
-    await ctx.service.user.findByUsername(followedUsername);
+    const { id: userId } = ctx.state.user;
+    const followUsername = ctx.params.username;
 
-    await ctx.service.follow.create({
-      followerUsername,
-      followedUsername,
-    });
-
-    let user = await ctx.service.user.findByUsername(followerUsername);
-    user = app.getUserJson(user);
-    user.following = true;
+    const user = await ctx.service.follow.follow(userId, followUsername);
+    // const user = await ctx.service.user.findById(userId);
     ctx.body = {
-      profile: user,
+      profile: app.getProfileJson(user, true),
     };
   }
 
-  async delete() {
+  async unfollow() {
     const { ctx, app } = this;
-    const followerUsername = ctx.state.user.username;
-    const followedUsername = ctx.params.username;
-    await ctx.service.follow.delete({ followedUsername, followerUsername });
-
-    let user = await ctx.service.user.findByUsername(followerUsername);
-    user = app.getUserJson(user);
-    user.following = false;
+    const { id: userId } = ctx.state.user;
+    const followUsername = ctx.params.username;
+    const user = await ctx.service.follow.unfollow(userId, followUsername);
     ctx.body = {
-      profile: user,
+      profile: app.getProfileJson(user, false),
     };
   }
 
   async get() {
     const { app, ctx } = this;
-    const tokenUser = app.verifyToken(ctx);
+    const user = app.verifyToken(ctx);
     const profileUsername = ctx.params.username;
-    let following;
-    if (tokenUser) {
-      following = await ctx.service.follow.is({
-        followedUsername: profileUsername,
-        followerUsername: tokenUser.username,
-      });
-    }
-
+    const userId = user && user.id;
+    const following = await ctx.service.follow.is(userId, profileUsername);
     const profileUser = await ctx.service.user.findByUsername(profileUsername);
-    delete profileUser.password;
-    profileUser.following = Boolean(following);
     ctx.body = {
-      profile: profileUser,
+      profile: app.getProfileJson(profileUser, following),
     };
   }
 }

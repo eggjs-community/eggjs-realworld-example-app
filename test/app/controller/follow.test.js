@@ -24,7 +24,7 @@ describe('test/app/controller/follow.test.js', () => {
       .post(`/profiles/${username2}/follow`)
       .set('Authorization', `Bearer ${token}`);
     assert(res.body.profile.following === true);
-    assert(res.body.profile.username === username1);
+    assert(res.body.profile.username === username2);
   });
 
   it('is should ok', async () => {
@@ -44,6 +44,6 @@ describe('test/app/controller/follow.test.js', () => {
       .delete(`/profiles/${username2}/follow`)
       .set('Authorization', `Bearer ${token}`);
     assert(res.body.profile.following === false);
-    assert(res.body.profile.username === username1);
+    assert(res.body.profile.username === username2);
   });
 });

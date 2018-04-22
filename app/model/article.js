@@ -1,13 +1,12 @@
 'use strict';
 
 module.exports = app => {
-  const { STRING, TEXT, INTEGER, JSON, UUID, UUIDV4 } = app.Sequelize;
+  const { INTEGER, STRING, TEXT, UUID, UUIDV4 } = app.Sequelize;
 
   const Article = app.model.define('article', {
     slug: {
       type: UUID,
       unique: true,
-      primaryKey: true,
       defaultValue: UUIDV4,
       allowNull: false,
     },
@@ -17,25 +16,14 @@ module.exports = app => {
     },
     description: {
       type: STRING,
+      allowNull: false,
     },
     body: {
       type: TEXT,
       allowNull: false,
     },
-    tagList: {
-      type: JSON,
-      defaultValue: [],
-    },
-    favoritesCount: {
+    userId: {
       type: INTEGER,
-      defaultValue: 0,
-    },
-    favoriteUsers: {
-      type: JSON,
-      defaultValue: [],
-    },
-    username: {
-      type: STRING,
       allowNull: false,
     },
   }, {
@@ -45,7 +33,7 @@ module.exports = app => {
   });
 
   Article.associate = function() {
-    app.model.Article.belongsTo(app.model.User, { as: 'author', foreignKey: 'username' });
+    app.model.Article.belongsTo(app.model.User, { as: 'author', foreignKey: 'userId' });
   };
 
   return Article;

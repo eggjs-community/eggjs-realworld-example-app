@@ -34,7 +34,7 @@ describe('test/app/service/user.test.js', () => {
   });
 
   it('update should ok', async () => {
-    const existUser = await userService.update({ bio: 'hello' }, username);
+    const existUser = await userService.update({ bio: 'hello' }, user.id);
     assertUser(existUser);
     assert(existUser.bio === 'hello');
   });

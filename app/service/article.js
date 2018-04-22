@@ -68,10 +68,10 @@ class ArticleService extends Service {
     console.log(follows);
   }
 
-  async create(data) {
+  async create(data, userId) {
     const { ctx } = this;
     data.slug = UUID(data.title);
-    const article = await ctx.model.Article.create(data);
+    const article = await ctx.model.Article.create({ ...data, userId });
     return ctx.model.Article.findById(article.slug, {
       attributes: [ ...articlePick ],
       include: [

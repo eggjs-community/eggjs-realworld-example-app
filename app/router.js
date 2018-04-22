@@ -9,8 +9,8 @@ module.exports = app => {
   router.post('/users', controller.user.register);
   router.get('/user', app.jwt, controller.user.get);
   router.put('/user', app.jwt, controller.user.update);
-  router.post('/profiles/:username/follow', app.jwt, controller.follow.create);
-  router.delete('/profiles/:username/follow', app.jwt, controller.follow.delete);
+  router.post('/profiles/:username/follow', app.jwt, controller.follow.follow);
+  router.delete('/profiles/:username/follow', app.jwt, controller.follow.unfollow);
   router.get('/profiles/:username', controller.follow.get);
 
   /**

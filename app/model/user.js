@@ -8,7 +8,6 @@ module.exports = app => {
       type: STRING,
       unique: true,
       allowNull: false,
-      primaryKey: true,
       validate: {
         is: /^[a-zA-Z]{1}([a-zA-Z0-9]|[._]){1,19}$/i,
         isLowercase: true,
@@ -18,7 +17,6 @@ module.exports = app => {
       type: STRING,
       unique: true,
       allowNull: false,
-      primaryKey: true,
       validate: {
         isEmail: true,
         isLowercase: true,
@@ -37,7 +35,8 @@ module.exports = app => {
   });
 
   User.associate = function() {
-    app.model.User.hasMany(app.model.Article, { as: 'articles', foreignKey: 'username' });
+    app.model.User.hasMany(app.model.Article, { as: 'articles', foreignKey: 'userId' });
+    app.model.User.hasMany(app.model.Follow, { foreignKey: 'userId' });
     // app.model.User.hasMany(app.model.Favorites, { as: 'favorites', foreignKey: 'id' });
     // app.model.User.hasMany(app.model.Comments, { as: 'comments', foreignKey: 'id' });
   };

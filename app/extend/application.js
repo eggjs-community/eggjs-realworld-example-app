@@ -1,25 +1,40 @@
 'use strict';
 
 module.exports = {
-  generateJWT(username) {
+  generateJWT(id, username) {
     const { config } = this;
-    const token = this.jwt.sign({ username }, config.jwt.secret);
+    const token = this.jwt.sign({ id, username }, config.jwt.secret);
     return token;
-  },
-  getToken(ctx) {
-    const authorization = ctx.request.headers.authorization;
-    if (!authorization) return null;
-    return authorization.split(' ')[1];
   },
   verifyToken(ctx) {
     const { config } = this;
-    const token = this.getToken(ctx);
+    const token = config.jwt.getToken(ctx);
     if (!token) return null;
     return this.jwt.verify(token, config.jwt.secret);
   },
-  getUserJson(user) {
-    delete user.password;
-    user.token = this.generateJWT(user.username);
-    return user;
+  getProfileJson(user, following) {
+    user = user.get();
+    following = !!following;
+    return {
+      username: user.username,
+      bio: user.bio || null,
+      image: user.image || null,
+      following,
+    };
+  },
+  getUserJson(user, ctx) {
+    user = user.get();
+    const { config } = this;
+    let token = config.jwt.getToken(ctx);
+    if (!token) {
+      token = this.generateJWT(user.id, user.username);
+    }
+    return {
+      username: user.username,
+      token,
+      email: user.email,
+      bio: user.bio || null,
+      image: user.image || null,
+    };
   },
 };
