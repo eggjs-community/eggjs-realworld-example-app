@@ -22,6 +22,13 @@ module.exports = {
       following,
     };
   },
+  getArticleJson(article, userId) {
+    article = article.get({ plain: true });
+    article.author.following = article.author.follows.some(follow => follow.followId === userId);
+    delete article.author.follows;
+    article.tagList = article.tagList.map(tag => tag.tag.name);
+    return article;
+  },
   getUserJson(user, ctx) {
     user = user.get();
     const { config } = this;

@@ -49,20 +49,25 @@ class ArticleService extends Service {
     return this.mergeArticleForFavorite(username, updatedData);
   }
 
-  async getArticlesByQuery(query) {
-    console.log(query);
-  }
+  async getByQuery({ offset = 0, limit = 10, order_by = 'createdAt', order = 'ASC' }) {
+    const { ctx, app } = this;
+    const tokenUser = app.verifyToken(ctx);
+    const includeFollow = tokenUser ? {
+      model: ctx.model.Follow,
+      where: { userId: tokenUser.id },
+    } : [];
 
-  async get(slug) {
-    const { ctx } = this;
-    slug = ctx.params.slug || slug;
-    const result = await ctx.model.Article.find({ where: { slug },
-      attributes: [ ...articlePick ],
+    return ctx.model.Article.findAndCountAll({
+      offset,
+      limit,
+      order: [[ order_by, order.toUpperCase() ]],
+      attributes: [ ...articlePick, 'userId' ],
       include: [
         {
           model: ctx.model.User,
           as: 'author',
           attributes: [ 'username', 'bio', 'image' ],
+          include: includeFollow,
         },
         {
           model: ctx.model.ArticleTag,
@@ -71,15 +76,44 @@ class ArticleService extends Service {
             {
               model: ctx.model.Tag,
             },
-          ] },
+          ],
+        },
+      ],
+    });
+  }
+
+  async get(slug) {
+    const { ctx } = this;
+    const result = await ctx.model.Article.find({ where: { slug },
+      attributes: [ ...articlePick ],
+      include: [
+        {
+          model: ctx.model.User,
+          as: 'author',
+          attributes: [ 'username', 'bio', 'image' ],
+          include: [
+            {
+              model: ctx.model.Follow,
+            },
+          ],
+        },
+        {
+          model: ctx.model.ArticleTag,
+          as: 'tagList',
+          include: [
+            {
+              model: ctx.model.Tag,
+            },
+          ],
+        },
       ],
     });
 
     return result;
   }
 
-  async getArticlesByFeed(follows) {
-    console.log(follows);
+  async getArticlesByFeed() {
+    // todo
   }
 
   async create(data, userId) {

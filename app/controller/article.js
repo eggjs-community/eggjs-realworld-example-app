@@ -25,23 +25,22 @@ class ArticleController extends Controller {
     ctx.body = article;
   }
 
-  async getArticlesByQuery() {
+  async getByQuery() {
+    const { ctx } = this;
+    const articles = await ctx.service.article.getByQuery({});
+    console.log(articles);
+    ctx.body = { articles };
     // todo
   }
 
-  async get(slug) {
+  async get() {
     const { ctx, service, app } = this;
-    slug = ctx.params || slug;
-    let article = await service.article.get(slug);
-    article = article.get();
-    const tokenUser = app.verifyToken(ctx);
-    let following = false;
-    if (tokenUser) {
-      following = await ctx.service.follow.is(tokenUser.userId, article.author.username);
-    }
-    article.author.dataValues.following = !!following;
-    article.tagList = article.tagList.map(tag => tag.tag.name);
-    ctx.body = { article };
+    const slug = ctx.params.slug;
+    const user = app.verifyToken(ctx);
+    const userId = user && user.id;
+    const article = await service.article.get(slug);
+    if (!article) ctx.throw(404, 'article not found');
+    ctx.body = { article: app.getArticleJson(article, userId) };
   }
 
 
@@ -50,7 +49,7 @@ class ArticleController extends Controller {
   }
 
   async create() {
-    const { ctx, service } = this;
+    const { ctx, service, app } = this;
     const { article: data } = ctx.request.body;
     const { id: userId } = ctx.state.user;
 
@@ -73,11 +72,8 @@ class ArticleController extends Controller {
     };
     ctx.validate(RULE_CREATE, data);
 
-    let article = await service.article.create(data, userId);
-    article = article.get();
-    article.author.dataValues.following = false;
-    article.tagList = article.tagList.map(tag => tag.tag.name);
-    ctx.body = { article };
+    const article = await service.article.create(data, userId);
+    ctx.body = { article: app.getArticleJson(article, userId) };
   }
 
   async update() {
