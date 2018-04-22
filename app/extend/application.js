@@ -30,7 +30,7 @@ module.exports = {
       token = this.generateJWT(user.id, user.username);
     }
     return {
-      usrname: user.username,
+      username: user.username,
       token,
       email: user.email,
       bio: user.bio || null,
