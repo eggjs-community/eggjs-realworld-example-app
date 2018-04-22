@@ -8,7 +8,6 @@ class FollowService extends Service {
     if (!follows) {
       this.ctx.throw(404, 'followUser not found');
     }
-    console.log(follows);
     await this.ctx.model.Follow.create({ userId, followId: follows.id });
     return follows;
   }
