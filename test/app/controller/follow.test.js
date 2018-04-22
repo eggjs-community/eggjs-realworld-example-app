@@ -31,6 +31,7 @@ describe('test/app/controller/follow.test.js', () => {
     let res = await app.httpRequest()
       .get(`/profiles/${username2}`)
       .set('Authorization', `Bearer ${token}`);
+    console.log(res.body.profile);
     assert(res.body.profile.following === true);
     assert(res.body.profile.username === username2);
     res = await app.httpRequest()

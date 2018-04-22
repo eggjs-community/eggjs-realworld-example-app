@@ -33,8 +33,8 @@ class FollowService extends Service {
       return false;
     }
     const profile = await ctx.service.user.findByUsername(profileUsername);
-    const result = await ctx.model.Follow.findById(userId);
-    return profile.id === result.followId;
+    const result = await ctx.model.Follow.find({ where: { userId, followId: profile.id } });
+    return !!result;
   }
 }
 
