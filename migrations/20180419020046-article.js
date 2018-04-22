@@ -7,6 +7,7 @@ module.exports = {
       id: {
         primaryKey: true,
         type: INTEGER,
+        autoIncrement: true,
       },
       slug: {
         type: UUID,
