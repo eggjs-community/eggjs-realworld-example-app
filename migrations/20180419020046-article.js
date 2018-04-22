@@ -4,6 +4,10 @@ module.exports = {
   up(queryInterface, Sequelize) {
     const { STRING, DATE, UUID, UUIDV4, TEXT, INTEGER } = Sequelize;
     return queryInterface.createTable('articles', {
+      id: {
+        primaryKey: true,
+        type: INTEGER,
+      },
       slug: {
         type: UUID,
         unique: true,
