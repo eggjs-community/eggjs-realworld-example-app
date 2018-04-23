@@ -16,11 +16,11 @@ module.exports = {
         type: INTEGER,
         autoIncrement: true,
       },
-      userId: {
+      followedId: {
         type: INTEGER,
         allowNull: false,
       },
-      followId: {
+      followerId: {
         type: INTEGER,
         allowNull: false,
       },
