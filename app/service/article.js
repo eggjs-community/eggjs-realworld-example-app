@@ -75,7 +75,7 @@ class ArticleService extends Service {
     });
   }
 
-  async get(userId, slug) {
+  async get(slug) {
     const { ctx } = this;
     const result = await ctx.model.Article.find({
       where: { slug },
@@ -103,7 +103,15 @@ class ArticleService extends Service {
     return result;
   }
 
-  async getArticlesByFeed() {
+  async getByFeed() {
+    // todo
+  }
+
+  async getByAuthor() {
+    // todo
+  }
+
+  async getFav() {
     // todo
   }
 
