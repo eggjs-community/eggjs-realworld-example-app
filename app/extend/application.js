@@ -29,6 +29,9 @@ module.exports = {
     const tagList = [];
     article.tagList.forEach(tag => tag && tagList.push(tag.name));
     article.tagList = tagList;
+    article.favoritesCount = article.favorites.length;
+    article.favorited = article.favorites.some(favorite => favorite.userId === userId);
+    delete article.favorites;
     return article;
   },
   getUserJson(user, ctx) {

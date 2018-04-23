@@ -28,6 +28,6 @@ module.exports = app => {
   router.post('/articles', app.jwt, controller.article.create);
   router.put('/articles/:slug', app.jwt, controller.article.update);
   router.delete('/articles/:slug', app.jwt, controller.article.delete);
-  router.post('/articles/:slug/favorite', app.jwt, controller.article.favoriteArticle);
-  router.delete('/articles/:slug/favorite', app.jwt, controller.article.unFavoriteArticle);
+  router.post('/articles/:slug/favorite', app.jwt, controller.article.favorite);
+  router.delete('/articles/:slug/favorite', app.jwt, controller.article.unFavorite);
 };

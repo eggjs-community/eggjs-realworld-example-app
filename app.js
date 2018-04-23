@@ -8,6 +8,7 @@ module.exports = app => {
       await app.model.Article.sync({ force: false });
       await app.model.Follow.sync({ force: false });
       await app.model.Tag.sync({ force: false });
+      await app.model.Favorite.sync({ force: false });
     });
   }
 };

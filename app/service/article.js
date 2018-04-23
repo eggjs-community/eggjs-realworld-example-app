@@ -2,51 +2,37 @@
 
 const Service = require('egg').Service;
 const UUID = require('uuid/v1');
-const R = require('ramda');
-
 const articlePick = [ 'slug', 'title', 'description', 'body', 'updatedAt', 'createdAt' ];
 
 class ArticleService extends Service {
-  mergeArticleForFavorite(username, article) {
-    const favorited = !!article.favoriteUsers.find(name => name === username);
-    return R.compose(
-      R.omit([ 'favoriteUsers' ]),
-      R.merge({ favorited })
-    )(article);
-  }
-
-  async favoriteArticle({ username }, slug) {
+  async favorite(userId, slug) {
     const { ctx } = this;
 
-    const articleRow = await ctx.model.Article.findOne({
+    const article = await ctx.model.Article.findOrCreate({
       where: { slug },
     });
 
-    const updatedData = await R.compose(
-      list => articleRow.update({ favoriteUsers: list }),
-      R.append(username),
-      row => row.get('favoriteUsers')
-    )(articleRow)
-      .then(row => row && row.toJSON());
+    await ctx.model.Favorite.create({
+      articleId: article.id,
+      userId,
+    });
 
-    return this.mergeArticleForFavorite(username, updatedData);
+    return this.get(slug);
   }
 
-  async unFavoriteArticle({ username }, slug) {
+  async unFavorite(userId, slug) {
     const { ctx } = this;
 
-    const articleRow = await ctx.model.Article.findOne({
+    const article = await ctx.model.Article.findOne({
       where: { slug },
     });
 
-    const updatedData = await R.compose(
-      list => articleRow.update({ favoriteUsers: list }),
-      R.filter(name => name !== username),
-      row => row.get('favoriteUsers')
-    )(articleRow)
-      .then(row => row && row.toJSON());
+    await ctx.model.Favorite.destroy({
+      articleId: article.id,
+      userId,
+    });
 
-    return this.mergeArticleForFavorite(username, updatedData);
+    return this.get(slug);
   }
 
   async getByQuery({ offset = 0, limit = 10, order_by = 'createdAt', order = 'ASC', author = '', tag = '' }) {
@@ -104,11 +90,15 @@ class ArticleService extends Service {
           ],
         },
         {
+          model: ctx.model.Favorite,
+        },
+        {
           model: ctx.model.Tag,
           as: 'tagList',
         },
       ],
     });
+    console.log(result.favorites);
     return result;
   }
 

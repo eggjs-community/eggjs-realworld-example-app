@@ -3,26 +3,22 @@
 const Controller = require('egg').Controller;
 
 class ArticleController extends Controller {
-  async favoriteArticle() {
+  async favorite() {
     const { ctx, app, service } = this;
     const { slug } = ctx.params;
+    const { id: userId } = ctx.state.user;
+    const article = await service.article.favorite(userId, slug);
 
-    const user = app.verifyToken(ctx);
-
-    const article = await service.article.favoriteArticle(user, slug);
-
-    ctx.body = article;
+    ctx.body = { article: app.getArticleJson(article, userId) };
   }
 
-  async unFavoriteArticle() {
+  async unFavorite() {
     const { ctx, app, service } = this;
     const { slug } = ctx.params;
+    const { id: userId } = ctx.state.user;
+    const article = await service.article.unFavorite(userId, slug);
 
-    const user = app.verifyToken(ctx);
-
-    const article = await service.article.unFavoriteArticle(user, slug);
-
-    ctx.body = article;
+    ctx.body = { article: app.getArticleJson(article, userId) };
   }
 
   async getByQuery() {
