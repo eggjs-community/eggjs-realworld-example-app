@@ -8,8 +8,8 @@ module.exports = app => {
   });
 
   Follow.associate = function() {
-    app.model.Follow.belongsTo(app.model.User, { foreignKey: 'userId' });
-    app.model.Follow.belongsTo(app.model.User, { foreignKey: 'followId' });
+    app.model.Follow.belongsTo(app.model.User, { foreignKey: 'followedId' });
+    app.model.Follow.belongsTo(app.model.User, { foreignKey: 'followerId' });
   };
 
   return Follow;

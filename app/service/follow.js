@@ -3,24 +3,24 @@
 const Service = require('egg').Service;
 
 class FollowService extends Service {
-  async follow(userId, followUsername) {
-    const follows = await this.ctx.service.user.findByUsername(followUsername);
+  async follow(userId, followedUsername) {
+    const follows = await this.ctx.service.user.findByUsername(followedUsername);
     if (!follows) {
       this.ctx.throw(404, 'followUser not found');
     }
-    await this.ctx.model.Follow.findOrCreate({ where: { userId: follows.id, followId: userId } });
+    await this.ctx.model.Follow.findOrCreate({ where: { followedId: follows.id, followerId: userId } });
     return follows;
   }
 
-  async unfollow(userId, followUsername) {
-    const follows = await this.ctx.service.user.findByUsername(followUsername);
+  async unfollow(userId, followedUsername) {
+    const follows = await this.ctx.service.user.findByUsername(followedUsername);
     if (!follows) {
       this.ctx.throw(404, 'followUser not found');
     }
     await this.ctx.model.Follow.destroy({
       where: {
-        userId: follows.id,
-        followId: userId,
+        followedId: follows.id,
+        followerId: userId,
       },
     });
 

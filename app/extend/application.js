@@ -24,7 +24,7 @@ module.exports = {
   },
   getArticleJson(article, userId) {
     article = article.get({ plain: true });
-    article.author.following = article.author.follows.some(follow => follow.followId === userId);
+    article.author.following = article.author.follows.some(follow => follow.followerId === userId);
     delete article.author.follows;
     const tagList = [];
     article.tagList.forEach(tag => tag && tagList.push(tag.name));
