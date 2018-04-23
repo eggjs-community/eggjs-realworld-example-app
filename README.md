@@ -11,6 +11,10 @@
 [david-image]: https://img.shields.io/david/eggjs-community/eggjs-realworld-example-app.svg?style=flat-square
 [david-url]: https://david-dm.org/eggjs-community/eggjs-realworld-example-app
 
+> ### Example Node (Eggjs + Mysql) codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld-example-apps) API spec.
+
+This repo is working — PRs and issues welcome!
+
 ## QuickStart
 
 <!-- add docs here for user -->
@@ -51,13 +55,17 @@ $ npm stop
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+
 <!-- prettier-ignore -->
 | [<img src="https://avatars0.githubusercontent.com/u/3297859?v=4" width="100px;"/><br /><sub><b>sinchang</b></sub>](https://buymeacoff.ee/sinchang)<br />[💻](https://github.com/eggjs-community/eggjs-realworld-example-app/commits?author=sinchang "Code") [🚇](#infra-sinchang "Infrastructure (Hosting, Build-Tools, etc)") |
 | :---: |
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+
 <!-- prettier-ignore -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
