@@ -28,8 +28,10 @@ class ArticleService extends Service {
     });
 
     await ctx.model.Favorite.destroy({
-      articleId: article.id,
-      userId,
+      where: {
+        articleId: article.id,
+        userId,
+      },
     });
 
     return this.get(slug);
@@ -73,7 +75,7 @@ class ArticleService extends Service {
     });
   }
 
-  async get(slug) {
+  async get(userId, slug) {
     const { ctx } = this;
     const result = await ctx.model.Article.find({
       where: { slug },
@@ -98,7 +100,6 @@ class ArticleService extends Service {
         },
       ],
     });
-    console.log(result.favorites);
     return result;
   }
 
