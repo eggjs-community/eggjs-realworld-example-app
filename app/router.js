@@ -30,4 +30,7 @@ module.exports = app => {
   router.delete('/articles/:slug', app.jwt, controller.article.delete);
   router.post('/articles/:slug/favorite', app.jwt, controller.article.favorite);
   router.delete('/articles/:slug/favorite', app.jwt, controller.article.unFavorite);
+
+  // tags
+  router.get('/tags', controller.tag.list);
 };

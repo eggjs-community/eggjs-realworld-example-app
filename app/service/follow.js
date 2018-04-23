@@ -9,6 +9,7 @@ class FollowService extends Service {
       this.ctx.throw(404, 'followUser not found');
     }
     await this.ctx.model.Follow.findOrCreate({ where: { followedId: follows.id, followerId: userId } });
+
     return follows;
   }
 
@@ -37,6 +38,9 @@ class FollowService extends Service {
         },
       ],
     });
+
+    if (!profile) ctx.throw(404, 'user not found');
+
     return profile;
   }
 }

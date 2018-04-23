@@ -30,7 +30,6 @@ class FollowController extends Controller {
     const profileUsername = ctx.params.username;
     const userId = user && user.id;
     const profileUser = await ctx.service.follow.get(userId, profileUsername);
-    if (!profileUser) ctx.throw(404, 'user not found');
     const following = profileUser.follows.some(follow => follow.followerId === userId);
     ctx.body = {
       profile: app.getProfileJson(profileUser, following),
