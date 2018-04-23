@@ -27,7 +27,7 @@ module.exports = {
     article.author.following = article.author.follows.some(follow => follow.followId === userId);
     delete article.author.follows;
     const tagList = [];
-    article.tagList.forEach(tag => tag.tag && tagList.push(tag.tag.name));
+    article.tagList.forEach(tag => tag && tagList.push(tag.name));
     article.tagList = tagList;
     return article;
   },

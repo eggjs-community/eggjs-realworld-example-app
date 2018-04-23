@@ -15,6 +15,7 @@ module.exports = app => {
   });
 
   Tag.associate = function() {
+    app.model.Tag.belongsTo(app.model.Article);
   };
 
   return Tag;

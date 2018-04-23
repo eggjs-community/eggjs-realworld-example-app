@@ -79,17 +79,15 @@ class ArticleController extends Controller {
   }
 
   async update() {
-    const { ctx, service } = this;
+    const { ctx, service, app } = this;
     const { slug } = ctx.params;
     const { article: data } = ctx.request.body;
+    const { id: userId } = ctx.state.user;
 
     ctx.validate({ slug: { type: 'string', required: true } }, ctx.params);
 
-    let article = await service.article.update(slug, data);
-    article = article.get();
-    article.author.dataValues.following = false;
-    article.tagList = article.tagList.map(tag => tag.tag.name);
-    ctx.body = { article };
+    const article = await service.article.update(slug, data);
+    ctx.body = { article: app.getArticleJson(article, userId) };
   }
 
   async delete() {

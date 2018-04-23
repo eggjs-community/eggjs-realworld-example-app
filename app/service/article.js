@@ -49,13 +49,25 @@ class ArticleService extends Service {
     return this.mergeArticleForFavorite(username, updatedData);
   }
 
-  async getByQuery({ offset = 0, limit = 10, order_by = 'createdAt', order = 'ASC', author = '' }) {
+  async getByQuery({ offset = 0, limit = 10, order_by = 'createdAt', order = 'ASC', author = '', tag = '' }) {
     const { ctx } = this;
+    let articleId = null;
+    if (tag) {
+      const result = await ctx.model.Tag.findAll({
+        where: { name: tag },
+      });
+
+      if (!result.length) return ctx.throw(404, 'tag not found');
+
+      articleId = result.map(item => item.articleId);
+    }
+
     return ctx.model.Article.findAndCountAll({
-      offset,
-      limit,
+      offset: Number(offset),
+      limit: Number(limit),
       order: [[ order_by, order.toUpperCase() ]],
       attributes: [ ...articlePick ],
+      where: tag ? { id: { $in: articleId } } : null,
       distinct: true, // Ref: http://t.cn/RuLhRvW
       include: [
         {
@@ -68,13 +80,8 @@ class ArticleService extends Service {
           }],
         },
         {
-          model: ctx.model.ArticleTag,
+          model: ctx.model.Tag,
           as: 'tagList',
-          include: [
-            {
-              model: ctx.model.Tag,
-            },
-          ],
         },
       ],
     });
@@ -82,7 +89,8 @@ class ArticleService extends Service {
 
   async get(slug) {
     const { ctx } = this;
-    const result = await ctx.model.Article.find({ where: { slug },
+    const result = await ctx.model.Article.find({
+      where: { slug },
       attributes: [ ...articlePick ],
       include: [
         {
@@ -96,17 +104,11 @@ class ArticleService extends Service {
           ],
         },
         {
-          model: ctx.model.ArticleTag,
+          model: ctx.model.Tag,
           as: 'tagList',
-          include: [
-            {
-              model: ctx.model.Tag,
-            },
-          ],
         },
       ],
     });
-
     return result;
   }
 
@@ -119,18 +121,9 @@ class ArticleService extends Service {
     data.slug = UUID(data.title);
     const { title, description, body } = data;
     const article = await ctx.model.Article.create({ title, description, body, userId });
-    const tags = await Promise.all(
-      data.tagList.map(tag => {
-        return ctx.model.Tag.findOrCreate({ where: { name: tag } });
-      })
-    );
-
     await Promise.all(
-      tags.map(tag => {
-        return ctx.model.ArticleTag.create({
-          articleId: article.id,
-          tagId: tag[0].id,
-        });
+      data.tagList.map(tag => {
+        return ctx.model.Tag.findOrCreate({ where: { name: tag, articleId: article.id } });
       })
     );
 
@@ -139,7 +132,8 @@ class ArticleService extends Service {
 
   async update(slug, data) {
     const { ctx } = this;
-    await ctx.model.Article.update(data, { where: { slug }, individualHooks: true });
+    await ctx.model.Article.update(data, { where: { slug } });
+    // Todo: update tags
     return this.get(slug);
   }
 
