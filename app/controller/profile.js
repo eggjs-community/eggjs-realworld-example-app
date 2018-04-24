@@ -8,7 +8,7 @@ class ProfileController extends Controller {
     const { id: userId } = ctx.state.user;
     const followedUsername = ctx.params.username;
 
-    const user = await ctx.service.follow.follow(userId, followedUsername);
+    const user = await ctx.service.profile.follow(userId, followedUsername);
     ctx.body = {
       profile: app.getProfileJson(user),
     };
@@ -18,7 +18,7 @@ class ProfileController extends Controller {
     const { ctx, app } = this;
     const { id: userId } = ctx.state.user;
     const followedUsername = ctx.params.username;
-    const user = await ctx.service.follow.unfollow(userId, followedUsername);
+    const user = await ctx.service.profile.unfollow(userId, followedUsername);
     ctx.body = {
       profile: app.getProfileJson(user),
     };
@@ -29,7 +29,7 @@ class ProfileController extends Controller {
     const user = app.verifyToken(ctx);
     const followedUsername = ctx.params.username;
     const userId = user && user.id;
-    const followedUser = await ctx.service.follow.get(userId, followedUsername);
+    const followedUser = await ctx.service.profile.get(userId, followedUsername);
     ctx.body = {
       profile: app.getProfileJson(followedUser),
     };
