@@ -132,7 +132,6 @@ class ArticleService extends Service {
   async update(slug, data) {
     const { ctx } = this;
     await ctx.model.Article.update(data, { where: { slug } });
-    // Todo: update tags
     return this.get(slug);
   }
 
