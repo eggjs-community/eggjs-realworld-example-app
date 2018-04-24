@@ -12,14 +12,12 @@ module.exports = {
     if (!token) return null;
     return this.jwt.verify(token, config.jwt.secret);
   },
-  getProfileJson(user, following) {
-    user = user.get();
-    following = !!following;
+  getProfileJson(user) {
     return {
       username: user.username,
       bio: user.bio || null,
       image: user.image || null,
-      following,
+      following: user.following,
     };
   },
   getArticleJson(article, userId) {
