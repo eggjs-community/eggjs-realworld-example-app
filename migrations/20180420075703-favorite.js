@@ -11,11 +11,11 @@ module.exports = {
     */
     const { INTEGER, DATE } = Sequelize;
     return queryInterface.createTable('favorites', {
-      // id: {
-      //   primaryKey: true,
-      //   type: INTEGER,
-      //   autoIncrement: true,
-      // },
+      id: {
+        primaryKey: true,
+        type: INTEGER,
+        autoIncrement: true,
+      },
       userId: {
         type: INTEGER,
         allowNull: false,

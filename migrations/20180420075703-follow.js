@@ -11,11 +11,11 @@ module.exports = {
     */
     const { INTEGER, DATE } = Sequelize;
     return queryInterface.createTable('follows', {
-      // id: {
-      //   primaryKey: true,
-      //   type: INTEGER,
-      //   autoIncrement: true,
-      // },
+      id: {
+        primaryKey: true,
+        type: INTEGER,
+        autoIncrement: true,
+      },
       followedId: {
         type: INTEGER,
         allowNull: false,
