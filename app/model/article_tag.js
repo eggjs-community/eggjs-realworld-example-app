@@ -3,7 +3,7 @@
 module.exports = app => {
   const { STRING } = app.Sequelize;
 
-  const Tag = app.model.define('tag', {
+  const ArticleTag = app.model.define('articleTag', {
     name: {
       type: STRING,
       allowNull: false,
@@ -11,11 +11,11 @@ module.exports = app => {
   }, {
     timestamps: true,
     underscored: false,
-    tableName: 'tags',
+    tableName: 'articleTag',
   });
 
-  Tag.associate = function() {
+  ArticleTag.associate = function() {
   };
 
-  return Tag;
+  return ArticleTag;
 };

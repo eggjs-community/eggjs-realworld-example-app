@@ -40,16 +40,14 @@ class ProfileService extends Service {
 
   async get(userId, followedUsername) {
     const { ctx } = this;
-    let followedUser = await ctx.model.User.find({
-      where: { username: followedUsername },
-    });
+    let followedUser = await this.ctx.service.user.findByUsername(followedUsername);
 
     if (!followedUser) ctx.throw(404, 'user not found');
 
     followedUser = followedUser.get();
 
     if (userId) {
-      followedUser.following = !!await ctx.model.Follow.find({
+      followedUser.following = !!await ctx.model.Follow.count({
         where: {
           followedId: followedUser.id,
           followerId: userId,
