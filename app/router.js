@@ -9,9 +9,9 @@ module.exports = app => {
   router.post('/users', controller.user.register);
   router.get('/user', app.jwt, controller.user.get);
   router.put('/user', app.jwt, controller.user.update);
-  router.post('/profiles/:username/follow', app.jwt, controller.follow.follow);
-  router.delete('/profiles/:username/follow', app.jwt, controller.follow.unfollow);
-  router.get('/profiles/:username', controller.follow.get);
+  router.post('/profiles/:username/follow', app.jwt, controller.profile.follow);
+  router.delete('/profiles/:username/follow', app.jwt, controller.profile.unfollow);
+  router.get('/profiles/:username', controller.profile.get);
 
   /**
    * @feature query 条件参数查询
