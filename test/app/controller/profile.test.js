@@ -2,7 +2,7 @@
 
 const { app, assert } = require('egg-mock/bootstrap');
 
-describe('test/app/controller/follow.test.js', () => {
+describe('test/app/controller/profile.test.js', () => {
   const password = '123456';
   const username1 = 'user1' + new Date().getTime();
   const username2 = 'user2' + new Date().getTime();

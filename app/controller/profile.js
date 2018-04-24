@@ -2,7 +2,7 @@
 
 const Controller = require('egg').Controller;
 
-class FollowController extends Controller {
+class ProfileController extends Controller {
   async follow() {
     const { ctx, app } = this;
     const { id: userId } = ctx.state.user;
@@ -10,7 +10,7 @@ class FollowController extends Controller {
 
     const user = await ctx.service.follow.follow(userId, followedUsername);
     ctx.body = {
-      profile: app.getProfileJson(user, true),
+      profile: app.getProfileJson(user),
     };
   }
 
@@ -20,21 +20,20 @@ class FollowController extends Controller {
     const followedUsername = ctx.params.username;
     const user = await ctx.service.follow.unfollow(userId, followedUsername);
     ctx.body = {
-      profile: app.getProfileJson(user, false),
+      profile: app.getProfileJson(user),
     };
   }
 
   async get() {
     const { app, ctx } = this;
     const user = app.verifyToken(ctx);
-    const profileUsername = ctx.params.username;
+    const followedUsername = ctx.params.username;
     const userId = user && user.id;
-    const profileUser = await ctx.service.follow.get(userId, profileUsername);
-    const following = profileUser.follows.some(follow => follow.followerId === userId);
+    const followedUser = await ctx.service.follow.get(userId, followedUsername);
     ctx.body = {
-      profile: app.getProfileJson(profileUser, following),
+      profile: app.getProfileJson(followedUser),
     };
   }
 }
 
-module.exports = FollowController;
+module.exports = ProfileController;
