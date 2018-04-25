@@ -18,6 +18,6 @@ describe('test/app/service/tag.test.js', () => {
   it('get should ok', async () => {
     const res = await app.httpRequest()
       .get('/tags');
-    assert(res.body.tags.length > 1);
+    assert(res.body.tags.length >= 1);
   });
 });

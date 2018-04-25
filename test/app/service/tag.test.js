@@ -17,6 +17,6 @@ describe('test/app/service/tag.test.js', () => {
 
   it('get should ok', async () => {
     const result = await app.mockContext().service.tag.list();
-    assert(result.length > 1);
+    assert(result.length >= 1);
   });
 });
