@@ -70,6 +70,7 @@ class ArticleController extends Controller {
       },
       tagList: {
         type: 'array',
+        required: false,
       },
     };
     ctx.validate(RULE_CREATE, data);
