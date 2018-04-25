@@ -1,7 +1,6 @@
 'use strict';
 
 const Service = require('egg').Service;
-const UUID = require('uuid/v1');
 const articlePick = [ 'slug', 'title', 'description', 'body', 'updatedAt', 'createdAt' ];
 
 class ArticleService extends Service {
