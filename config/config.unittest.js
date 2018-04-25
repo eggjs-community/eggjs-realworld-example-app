@@ -5,7 +5,7 @@ module.exports = () => {
 
   exports.sequelize = {
     dialect: 'mysql',
-    database: 'realworld-test',
+    database: 'realworld_test',
     host: 'localhost',
     port: '3306',
     username: 'root',
