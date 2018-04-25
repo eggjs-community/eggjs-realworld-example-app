@@ -27,9 +27,11 @@ describe('test/app/service/profile.test.js', () => {
   });
 
   it('get should ok', async () => {
-    const result = await profileService.get(userId, username);
+    let result = await profileService.get(userId, username);
     assert(result.username === username);
     assert(result.following === true);
+    result = await profileService.get('', username);
+    assert(result.following === false);
   });
 
   it('unfollow should ok', async () => {

@@ -27,11 +27,15 @@ describe('test/app/controller/profile.test.js', () => {
   });
 
   it('get should ok', async () => {
-    const res = await app.httpRequest()
+    let res = await app.httpRequest()
       .get(`/profiles/${username}`)
       .set('Authorization', `Bearer ${token}`);
     assert(res.body.profile.following === true);
     assert(res.body.profile.username === username);
+    res = await app.httpRequest()
+      .get('/profiles/sinchang')
+      .set('Authorization', `Bearer ${token}`);
+    assert(res.status === 404);
   });
 
   it('unfollow should ok', async () => {

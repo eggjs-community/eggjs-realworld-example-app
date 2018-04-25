@@ -21,8 +21,12 @@ describe('test/app/controller/user.test.js', () => {
   });
 
   it('login should ok', async () => {
-    const res = await app.httpRequest().post('/users/login').send({ user: { email, password } });
+    let res = await app.httpRequest().post('/users/login').send({ user: { email, password } });
     assert(res.body.user);
+    res = await app.httpRequest().post('/users/login').send({ user: { email, password: '1234567' } });
+    assert(res.status === 400);
+    res = await app.httpRequest().post('/users/login').send({ user: { email: 'sinchang@qq.com', password } });
+    assert(res.status === 404);
   });
 
   it('get should ok', async () => {

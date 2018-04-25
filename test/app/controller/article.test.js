@@ -61,10 +61,14 @@ describe('test/app/controller/article.test.js', () => {
   });
 
   it('favorite should ok', async () => {
-    const result = await app.httpRequest()
+    let result = await app.httpRequest()
       .post(`/articles/${slug2}/favorite`)
       .set('Authorization', `Bearer ${token1}`);
     assert(result.body.article.favorited === true);
+    result = await app.httpRequest()
+      .post('/articles/sinchang/favorite')
+      .set('Authorization', `Bearer ${token1}`);
+    assert(result.status === 404);
   });
 
   it('get should ok', async () => {
@@ -112,6 +116,9 @@ describe('test/app/controller/article.test.js', () => {
     result = await app.httpRequest()
       .get(`/articles?favorited=${name1}`);
     assert(result.body.articles.length === 1);
+    result = await app.httpRequest()
+      .get('/articles?tag=sinchang');
+    assert(result.status === 404);
   });
 
   it('unFavorite should ok', async () => {
