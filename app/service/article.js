@@ -8,14 +8,13 @@ class ArticleService extends Service {
   async favorite(userId, slug) {
     const { ctx } = this;
 
-    const article = await ctx.model.Article.findOrCreate({
-      where: { slug },
-    });
+    const article = await this.check(slug, userId, false);
 
-    await ctx.model.Favorite.create({
-      articleId: article.id,
-      userId,
-    });
+    await ctx.model.Favorite.findOrCreate({
+      where: {
+        articleId: article.id,
+        userId,
+      } });
 
     return this.get(slug);
   }
@@ -23,9 +22,7 @@ class ArticleService extends Service {
   async unFavorite(userId, slug) {
     const { ctx } = this;
 
-    const article = await ctx.model.Article.findOne({
-      where: { slug },
-    });
+    const article = await this.check(slug, userId, false);
 
     await ctx.model.Favorite.destroy({
       where: {
@@ -37,9 +34,19 @@ class ArticleService extends Service {
     return this.get(slug);
   }
 
-  async getByQuery({ offset = 0, limit = 10, order_by = 'createdAt', order = 'ASC', author = '', tag = '' }) {
+  async getByQuery({
+    offset = 0,
+    limit = 10,
+    order_by = 'createdAt',
+    order = 'ASC',
+    author = '',
+    tag = '',
+    followerId = '',
+    favorited = '' }) {
     const { ctx } = this;
     let articleId = null;
+    let favoritedUser;
+
     if (tag) {
       const result = await ctx.model.Tag.findAll({
         where: { name: tag },
@@ -48,6 +55,10 @@ class ArticleService extends Service {
       if (!result.length) return ctx.throw(404, 'tag not found');
 
       articleId = result.map(item => item.articleId);
+    }
+
+    if (favorited) {
+      favoritedUser = await ctx.service.user.findByUsername(favorited);
     }
 
     return ctx.model.Article.findAndCountAll({
@@ -65,7 +76,12 @@ class ArticleService extends Service {
           where: author ? { username: author } : {},
           include: [{
             model: ctx.model.Follow,
+            where: followerId ? { followerId } : null,
           }],
+        },
+        {
+          model: ctx.model.Favorite,
+          where: favorited ? { userId: favoritedUser.id } : null,
         },
         {
           model: ctx.model.Tag,
@@ -77,7 +93,7 @@ class ArticleService extends Service {
 
   async get(slug) {
     const { ctx } = this;
-    const result = await ctx.model.Article.find({
+    const article = await ctx.model.Article.findOne({
       where: { slug },
       attributes: [ ...articlePick ],
       include: [
@@ -100,19 +116,10 @@ class ArticleService extends Service {
         },
       ],
     });
-    return result;
-  }
 
-  async getByFeed() {
-    // todo
-  }
+    if (!article) ctx.throw(404, 'article not found');
 
-  async getByAuthor() {
-    // todo
-  }
-
-  async getFav() {
-    // todo
+    return article;
   }
 
   async create(data, userId) {
@@ -129,15 +136,30 @@ class ArticleService extends Service {
     return this.get(article.slug);
   }
 
-  async update(slug, data) {
-    const { ctx } = this;
-    await ctx.model.Article.update(data, { where: { slug } });
+  async update(slug, data, userId) {
+    const article = await this.check(slug, userId, true);
+
+    await article.update(data);
+
     return this.get(slug);
   }
 
-  async delete(slug) {
+  async delete(slug, userId) {
+    const article = await this.check(slug, userId, true);
+
+    return article.destroy();
+  }
+
+  // admin = true ->  不允许非文章作者进行操作
+  async check(slug, userId, admin) {
     const { ctx } = this;
-    return await ctx.model.Article.destroy({ where: { slug } });
+    const article = await ctx.model.Article.findOne({ where: { slug } });
+
+    if (!article) return ctx.throw(404, 'article not found');
+
+    if (article.userId !== userId && admin) return ctx.throw(403);
+
+    return article;
   }
 }
 

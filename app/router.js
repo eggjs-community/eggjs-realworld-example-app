@@ -18,13 +18,13 @@ module.exports = app => {
    * @query ?tag=AngularJS, ?author=jake, ?favorited=jake, ?limit=20, ?offset=0
    */
   router.get('/articles', controller.article.getByQuery);
+  router.get('/articles/feed', app.jwt, controller.article.getByFeed);
   router.get('/articles/:slug', controller.article.get);
 
   /**
    * @feature 关注用户动态
    * @query ?limit=20, ?offset=0
    */
-  router.get('/articles/feed', app.jwt, controller.article.getArticlesByFeed);
   router.post('/articles', app.jwt, controller.article.create);
   router.put('/articles/:slug', app.jwt, controller.article.update);
   router.delete('/articles/:slug', app.jwt, controller.article.delete);

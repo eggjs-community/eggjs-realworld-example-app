@@ -25,7 +25,7 @@ class ArticleController extends Controller {
     const { ctx, app } = this;
     const user = app.verifyToken(ctx);
     const userId = user && user.id;
-    let articles = await ctx.service.article.getByQuery({ ...ctx.request.query, userId });
+    let articles = await ctx.service.article.getByQuery({ ...ctx.request.query });
     const articlesCount = articles.count;
     articles = articles.rows.map(article => app.getArticleJson(article, userId));
     ctx.body = { articles, articlesCount };
@@ -37,13 +37,17 @@ class ArticleController extends Controller {
     const user = app.verifyToken(ctx);
     const userId = user && user.id;
     const article = await service.article.get(slug);
-    if (!article) ctx.throw(404, 'article not found');
     ctx.body = { article: app.getArticleJson(article, userId) };
   }
 
 
-  async getArticlesByFeed() {
-    // todo
+  async getByFeed() {
+    const { ctx, app } = this;
+    const { id: userId } = ctx.state.user;
+    let articles = await ctx.service.article.getByQuery({ followerId: userId });
+    const articlesCount = articles.count;
+    articles = articles.rows.map(article => app.getArticleJson(article, userId));
+    ctx.body = { articles, articlesCount };
   }
 
   async create() {
@@ -82,17 +86,18 @@ class ArticleController extends Controller {
 
     ctx.validate({ slug: { type: 'string', required: true } }, ctx.params);
 
-    const article = await service.article.update(slug, data);
+    const article = await service.article.update(slug, data, userId);
     ctx.body = { article: app.getArticleJson(article, userId) };
   }
 
   async delete() {
     const { ctx, service } = this;
     const { slug } = ctx.params;
+    const { id: userId } = ctx.state.user;
 
     ctx.validate({ slug: { type: 'string', required: true } }, ctx.params);
 
-    const result = await service.article.delete(slug);
+    const result = await service.article.delete(slug, userId);
     const message = result ? 'succeed' : 'failed';
     ctx.body = { message };
   }
