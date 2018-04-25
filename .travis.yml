@@ -6,11 +6,11 @@ notifications:
   webhooks: https://www.travisbuddy.com/
   on_success: never
 before_install:
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS realworld;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS realworld-test;'
 install:
   - npm i npminstall && npminstall
 before_script:
-  - npm run migrate:up
+  - EGG_SERVER_ENV=unittest npm run migrate:up
 script:
   - npm run ci
 after_script:

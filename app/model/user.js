@@ -9,7 +9,7 @@ module.exports = app => {
       unique: true,
       allowNull: false,
       validate: {
-        is: /^[a-zA-Z]{1}([a-zA-Z0-9]|[._]){1,19}$/i,
+        is: /^[a-zA-Z]{1}([a-zA-Z0-9]|[._]){1,50}$/i,
         isLowercase: true,
       },
     },
