@@ -27,11 +27,11 @@ module.exports = appInfo => {
 
   exports.sequelize = {
     dialect: 'mysql',
-    database: 'realworld',
+    database: process.env.DB_DATABASE || 'realworld',
     host: 'localhost',
     port: '3306',
-    username: 'root',
-    password: '',
+    username: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
     timezone: '+08:00', // 东八时区
   };
 

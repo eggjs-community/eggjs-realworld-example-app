@@ -1,0 +1,36 @@
+version: '3'
+services: 
+  realworld:
+    image: sinchang/realworld:latest
+    environment:
+      - NODE_ENV=production
+      - EGG_SERVER_ENV=prod
+      - DB_USER=root
+      - DB_DATABASE=realworld
+      - DB_PASSWORD=
+    depends_on:
+      - db
+    networks:
+      - docker_realworld
+    ports:
+      - 7001:7001
+
+  db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_DATABASE=realworld
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=
+    networks:
+      - docker_realworld
+
+volumes:
+  db_data:
+
+networks:
+  docker_realworld:
+    driver: bridge    

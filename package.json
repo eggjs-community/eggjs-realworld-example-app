@@ -30,6 +30,7 @@
   },
   "scripts": {
     "start": "egg-scripts start --daemon --title=egg-server-eggjs-realworld-example-app",
+    "docker": "egg-scripts start --title=egg-server-eggjs-realworld-example-app",
     "stop": "egg-scripts stop --title=egg-server-eggjs-realworld-example-app",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
