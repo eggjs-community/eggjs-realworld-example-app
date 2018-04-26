@@ -24,9 +24,9 @@ module.exports = {
     article = article.get({ plain: true });
     article.author.following = article.author.follows.some(follow => follow.followerId === userId);
     delete article.author.follows;
-    const tagList = [];
-    article.tagList.forEach(tag => tag && tagList.push(tag.name));
-    article.tagList = tagList;
+    const articleTags = article.articleTags.map(articleTag => articleTag.tag);
+    delete article.articleTags;
+    article.tagList = articleTags.map(tag => tag.name);
     article.favoritesCount = article.favorites.length;
     article.favorited = article.favorites.some(favorite => favorite.userId === userId);
     delete article.favorites;

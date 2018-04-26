@@ -47,13 +47,18 @@ class ArticleService extends Service {
     let favoritedUser;
 
     if (tag) {
-      const result = await ctx.model.Tag.findAll({
+      const result = await ctx.model.Tag.findOne({
         where: { name: tag },
+        include: [
+          {
+            model: ctx.model.ArticleTag,
+          },
+        ],
       });
 
-      if (!result.length) return ctx.throw(404, 'tag not found');
+      if (!result) return ctx.throw(404, 'tag not found');
 
-      articleId = result.map(item => item.articleId);
+      articleId = result.articleTags.map(item => item.articleId);
     }
 
     if (favorited) {
@@ -83,8 +88,12 @@ class ArticleService extends Service {
           where: favorited ? { userId: favoritedUser.id } : null,
         },
         {
-          model: ctx.model.Tag,
-          as: 'tagList',
+          model: ctx.model.ArticleTag,
+          include: [
+            {
+              model: ctx.model.Tag,
+            },
+          ],
         },
       ],
     });
@@ -110,14 +119,17 @@ class ArticleService extends Service {
           model: ctx.model.Favorite,
         },
         {
-          model: ctx.model.Tag,
-          as: 'tagList',
+          model: ctx.model.ArticleTag,
+          include: [
+            {
+              model: ctx.model.Tag,
+            },
+          ],
         },
       ],
     });
 
     if (!article) ctx.throw(404, 'article not found');
-
     return article;
   }
 
@@ -125,9 +137,19 @@ class ArticleService extends Service {
     const { ctx } = this;
     const { title, description, body, tagList = [] } = data;
     const article = await ctx.model.Article.create({ title, description, body, userId });
-    await Promise.all(
+
+    const tags = await Promise.all(
       tagList.map(tag => {
-        return ctx.model.Tag.findOrCreate({ where: { name: tag, articleId: article.id } });
+        return ctx.model.Tag.findOrCreate({ where: { name: tag } });
+      })
+    );
+
+    await Promise.all(
+      tags.map(tag => {
+        return ctx.model.ArticleTag.create({
+          articleId: article.id,
+          tagId: tag[0].id,
+        });
       })
     );
 
