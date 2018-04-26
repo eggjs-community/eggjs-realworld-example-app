@@ -29,8 +29,8 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-eggjs-realworld-example-app",
-    "docker": "egg-scripts start --title=egg-server-eggjs-realworld-example-app",
+    "deploy": "egg-scripts start --daemon --title=egg-server-eggjs-realworld-example-app",
+    "start": "egg-scripts start --title=egg-server-eggjs-realworld-example-app",
     "stop": "egg-scripts stop --title=egg-server-eggjs-realworld-example-app",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
