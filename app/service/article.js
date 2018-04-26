@@ -37,7 +37,7 @@ class ArticleService extends Service {
     offset = 0,
     limit = 10,
     order_by = 'createdAt',
-    order = 'ASC',
+    order = 'DESC',
     author = '',
     tag = '',
     followerId = '',
