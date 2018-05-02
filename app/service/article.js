@@ -126,13 +126,13 @@ class ArticleService extends Service {
     const { ctx } = this;
     data.slug = UUID(data.title);
     const { title, description, body } = data;
+
     const article = await ctx.model.Article.create({ title, description, body, userId });
     await Promise.all(
       data.tagList.map(tag => {
         return ctx.model.Tag.findOrCreate({ where: { name: tag, articleId: article.id } });
       })
     );
-
     return this.get(article.slug);
   }
 

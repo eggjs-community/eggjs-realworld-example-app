@@ -24,7 +24,6 @@ module.exports = app => {
 
   Comment.associate = function() {
     app.model.Comment.belongsTo(app.model.User, { as: 'author', foreignKey: 'userId' });
-    app.model.Comment.belongsTo(app.model.Article, { foreignKey: 'slug' });
   };
 
   return Comment;
