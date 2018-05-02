@@ -1,6 +1,7 @@
 'use strict';
 
 const Service = require('egg').Service;
+const UUID = require('uuid/v1');
 const articlePick = [ 'slug', 'title', 'description', 'body', 'updatedAt', 'createdAt' ];
 
 class ArticleService extends Service {
@@ -37,7 +38,7 @@ class ArticleService extends Service {
     offset = 0,
     limit = 10,
     order_by = 'createdAt',
-    order = 'DESC',
+    order = 'ASC',
     author = '',
     tag = '',
     followerId = '',
@@ -47,18 +48,13 @@ class ArticleService extends Service {
     let favoritedUser;
 
     if (tag) {
-      const result = await ctx.model.Tag.findOne({
+      const result = await ctx.model.Tag.findAll({
         where: { name: tag },
-        include: [
-          {
-            model: ctx.model.ArticleTag,
-          },
-        ],
       });
 
-      if (!result) return ctx.throw(404, 'tag not found');
+      if (!result.length) return ctx.throw(404, 'tag not found');
 
-      articleId = result.articleTags.map(item => item.articleId);
+      articleId = result.map(item => item.articleId);
     }
 
     if (favorited) {
@@ -88,12 +84,8 @@ class ArticleService extends Service {
           where: favorited ? { userId: favoritedUser.id } : null,
         },
         {
-          model: ctx.model.ArticleTag,
-          include: [
-            {
-              model: ctx.model.Tag,
-            },
-          ],
+          model: ctx.model.Tag,
+          as: 'tagList',
         },
       ],
     });
@@ -119,37 +111,25 @@ class ArticleService extends Service {
           model: ctx.model.Favorite,
         },
         {
-          model: ctx.model.ArticleTag,
-          include: [
-            {
-              model: ctx.model.Tag,
-            },
-          ],
+          model: ctx.model.Tag,
+          as: 'tagList',
         },
       ],
     });
 
     if (!article) ctx.throw(404, 'article not found');
+
     return article;
   }
 
   async create(data, userId) {
     const { ctx } = this;
-    const { title, description, body, tagList = [] } = data;
+    data.slug = UUID(data.title);
+    const { title, description, body } = data;
     const article = await ctx.model.Article.create({ title, description, body, userId });
-
-    const tags = await Promise.all(
-      tagList.map(tag => {
-        return ctx.model.Tag.findOrCreate({ where: { name: tag } });
-      })
-    );
-
     await Promise.all(
-      tags.map(tag => {
-        return ctx.model.ArticleTag.create({
-          articleId: article.id,
-          tagId: tag[0].id,
-        });
+      data.tagList.map(tag => {
+        return ctx.model.Tag.findOrCreate({ where: { name: tag, articleId: article.id } });
       })
     );
 
