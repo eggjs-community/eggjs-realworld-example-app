@@ -70,6 +70,7 @@ class UserController extends Controller {
       username,
       email,
       password,
+      image: 'https://static.productionready.io/images/smiley-cyrus.jpg',
     };
 
     const result = await ctx.service.user.create(newUser);
