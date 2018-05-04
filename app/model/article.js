@@ -34,7 +34,7 @@ module.exports = app => {
 
   Article.associate = function() {
     app.model.Article.belongsTo(app.model.User, { as: 'author', foreignKey: 'userId' });
-    app.model.Article.hasMany(app.model.Tag, { as: 'tagList' });
+    app.model.Article.hasMany(app.model.ArticleTag);
     app.model.Article.hasMany(app.model.Favorite);
     app.model.Article.hasMany(app.model.Comment, { foreignKey: 'slug' });
   };
