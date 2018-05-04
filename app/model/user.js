@@ -36,6 +36,7 @@ module.exports = app => {
 
   User.associate = function() {
     app.model.User.hasMany(app.model.Article);
+    app.model.User.hasMany(app.model.Comment);
     app.model.User.hasMany(app.model.Follow, { foreignKey: 'followedId' });
   };
 

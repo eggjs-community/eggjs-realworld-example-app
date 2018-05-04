@@ -31,6 +31,11 @@ module.exports = app => {
   router.post('/articles/:slug/favorite', app.jwt, controller.article.favorite);
   router.delete('/articles/:slug/favorite', app.jwt, controller.article.unFavorite);
 
+  // 评论
+  router.post('/articles/:slug/comments', app.jwt, controller.comment.addCommentsToArticle);
+  router.get('/articles/:slug/comments', controller.comment.getCommentsFromArticleSlug);
+  router.delete('/articles/:slug/comments/:id', app.jwt, controller.comment.deleteCommentBySlugAndId);
+
   // tags
   router.get('/tags', controller.tag.list);
 };

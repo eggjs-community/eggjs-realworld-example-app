@@ -10,6 +10,7 @@ module.exports = app => {
       await app.model.Tag.sync({ force: false });
       await app.model.Favorite.sync({ force: false });
       await app.model.ArticleTag.sync({ force: false });
+      await app.model.Comment.sync({ force: false });
     });
   }
 };
