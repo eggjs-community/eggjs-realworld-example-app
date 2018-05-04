@@ -34,14 +34,14 @@ class ArticleService extends Service {
   }
 
   async getByQuery({
-                     offset = 0,
-                     limit = 10,
-                     order_by = 'createdAt',
-                     order = 'DESC',
-                     author = '',
-                     tag = '',
-                     followerId = '',
-                     favorited = '' }) {
+    offset = 0,
+    limit = 10,
+    order_by = 'createdAt',
+    order = 'DESC',
+    author = '',
+    tag = '',
+    followerId = '',
+    favorited = '' }) {
     const { ctx } = this;
     let articleId = null;
     let favoritedUser;
