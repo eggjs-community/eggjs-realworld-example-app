@@ -9,7 +9,7 @@ module.exports = {
       Example:
       return queryInterface.createTable('users', { id: Sequelize.INTEGER });
     */
-    const { UUID, DATE, INTEGER, TEXT } = Sequelize;
+    const { DATE, INTEGER, TEXT } = Sequelize;
     return queryInterface.createTable('comments', {
       id: {
         primaryKey: true,
@@ -24,8 +24,8 @@ module.exports = {
         type: INTEGER,
         allowNull: false,
       },
-      slug: {
-        type: UUID,
+      articleId: {
+        type: INTEGER,
         allowNull: false,
       },
       createdAt: DATE,
