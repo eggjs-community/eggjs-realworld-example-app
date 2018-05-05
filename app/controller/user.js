@@ -21,8 +21,8 @@ class UserController extends Controller {
     ctx.validate({
       email: { type: 'email', required: false },
       password: { type: 'string', required: false },
-      bio: { type: 'string', required: false },
-      image: { type: 'string', required: false },
+      bio: { type: 'string', required: false, allowEmpty: true },
+      image: { type: 'string', required: false, allowEmpty: true },
       username: { type: 'string', required: false },
     }, user);
     const existUser = await ctx.service.user.update(user, id);
