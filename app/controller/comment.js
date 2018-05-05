@@ -26,7 +26,7 @@ class CommentController extends Controller {
     ctx.validate({ slug: { type: 'string', required: true } }, ctx.params);
 
     const comments = await ctx.service.comment.fetch(slug, userId);
-    ctx.body = comments;
+    ctx.body = { comments };
   }
 
   async delete() {

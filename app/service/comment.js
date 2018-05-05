@@ -31,6 +31,7 @@ class CommentService extends Service {
     if (!article) ctx.throw(404, 'article not found');
 
     const comments = await ctx.model.Comment.findAll({
+      order: [[ 'createdAt', 'DESC' ]],
       where: {
         articleId: article.id,
       },
@@ -45,6 +46,9 @@ class CommentService extends Service {
         },
       ],
     }).then(rows => rows.length && rows.map(r => r && r.toJSON()));
+
+    if (!comments) return [];
+
     return comments.map(item => {
       item.author.following = item.author.follows.some(sub => sub.followerId === userId);
       delete item.author.follows;
