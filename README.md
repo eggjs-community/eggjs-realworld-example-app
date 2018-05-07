@@ -51,14 +51,16 @@ $ npm stop
 
 * [vue-realworld-example-app](https://vue-vuex-realworld.netlify.com/)
 
-* [telegram group](https://t.me/joinchat/BEmHUwwrW4VbxD_NdTBiEA)
+* [react-dva-realworld-example-app](https://github.com/sinchang/react-dva-realworld-example-app)
 
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+
 <!-- prettier-ignore -->
 | [<img src="https://avatars0.githubusercontent.com/u/3297859?v=4" width="100px;"/><br /><sub><b>sinchang</b></sub>](https://buymeacoff.ee/sinchang)<br />[💻](https://github.com/eggjs-community/eggjs-realworld-example-app/commits?author=sinchang "Code") [🚇](#infra-sinchang "Infrastructure (Hosting, Build-Tools, etc)") | [<img src="https://avatars1.githubusercontent.com/u/18510448?v=4" width="100px;"/><br /><sub><b>sfyr111</b></sub>](https://github.com/sfyr111)<br />[💻](https://github.com/eggjs-community/eggjs-realworld-example-app/commits?author=sfyr111 "Code") |
 | :---: | :---: |
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
